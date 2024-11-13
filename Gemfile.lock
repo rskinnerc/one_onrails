@@ -368,6 +368,7 @@ DEPENDENCIES
   brakeman
   cssbundling-rails
   debug
+  dotenv
   factory_bot_rails
   jsbundling-rails
   kamal
