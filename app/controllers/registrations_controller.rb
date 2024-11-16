@@ -2,7 +2,9 @@ class RegistrationsController < ApplicationController
   allow_unauthenticated_access only: %i[ new create ]
 
   def new
-    redirect_to root_path if authenticated?
+    if authenticated?
+      redirect_to root_path, alert: "You are already logged in."
+    end
   end
 
   def create
