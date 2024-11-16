@@ -90,4 +90,36 @@ RSpec.describe "Sessions", type: :request do
       end
     end
   end
+
+  describe "DELETE /destroy" do
+    let(:do_request) { delete session_path }
+
+    describe "when user is logged in" do
+      let(:session) { create(:session, user: user) }
+
+      before do
+        allow(Current).to receive(:session).and_return(session)
+      end
+
+      it "terminates the session" do
+        expect { do_request }.to change { Session.count }.by(-1)
+      end
+
+      it "redirects to the new session path" do
+        do_request
+        expect(response).to redirect_to(new_session_path)
+      end
+    end
+
+    describe "when user is not logged in" do
+      it "does not terminate the session" do
+        expect { do_request }.not_to change { Session.count }
+      end
+
+      it "redirects to the new session path" do
+        do_request
+        expect(response).to redirect_to(new_session_path)
+      end
+    end
+  end
 end
