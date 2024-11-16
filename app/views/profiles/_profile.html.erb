@@ -1,0 +1,32 @@
+<div id="<%= dom_id profile %>">
+  <p>
+    <strong>First name:</strong>
+    <%= profile.first_name %>
+  </p>
+
+  <p>
+    <strong>Last name:</strong>
+    <%= profile.last_name %>
+  </p>
+
+  <p>
+    <strong>Phone:</strong>
+    <%= profile.phone %>
+  </p>
+
+  <p>
+    <strong>Avatar:</strong>
+    <%= link_to profile.avatar.filename, profile.avatar if profile.avatar.attached? %>
+  </p>
+
+  <p>
+    <strong>Country:</strong>
+    <%= profile.country %>
+  </p>
+
+  <p>
+    <strong>User:</strong>
+    <%= profile.user_id %>
+  </p>
+
+</div>
