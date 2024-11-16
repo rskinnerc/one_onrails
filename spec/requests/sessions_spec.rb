@@ -1,14 +1,14 @@
 require 'rails_helper'
 
-RSpec.describe "Registrations", type: :request do
-  let(:user) { create(:user) }
+RSpec.describe "Sessions", type: :request do
+  let(:user) { create(:user, password: 'password123') }
 
   before do
     user
   end
 
   describe "GET /new" do
-    let(:do_request) { get new_registration_path }
+    let(:do_request) { get new_session_path }
 
     describe "when user is not logged in" do
       it "returns http success" do
@@ -37,18 +37,13 @@ RSpec.describe "Registrations", type: :request do
   end
 
   describe "POST /create" do
-    let(:do_request) { post registrations_path, params: params }
+    let(:do_request) { post session_path, params: params }
     let(:params) {
       {
-        email_address: Faker::Internet.email,
-        password: 'password123',
-        password_confirmation: 'password123'
+        email_address: user.email_address,
+        password: 'password123'
       }
     }
-
-    it "creates a new user" do
-      expect { do_request }.to change { User.count }.by(1)
-    end
 
     it "creates a new session" do
       expect { do_request }.to change { Session.count }.by(1)
@@ -59,26 +54,39 @@ RSpec.describe "Registrations", type: :request do
       expect(response).to redirect_to(root_path)
     end
 
-    describe "with invalid params" do
+    describe "when email address is invalid" do
       let(:params) {
         {
-          email_address: Faker::Internet.email,
-          password: 'password123',
-          password_confirmation: 'password'
+          email_address: 'wrong@example.com',
+          password: 'password123'
         }
       }
-
-      it "does not create a new user" do
-        expect { do_request }.not_to change { User.count }
-      end
 
       it "does not create a new session" do
         expect { do_request }.not_to change { Session.count }
       end
 
-      it "returns http unprocessable entity" do
+      it "redirects to the new session path" do
         do_request
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to redirect_to(new_session_path)
+      end
+    end
+
+    describe "when password is invalid" do
+      let(:params) {
+        {
+          email_address: user.email_address,
+          password: 'wrongpassword'
+        }
+      }
+
+      it "does not create a new session" do
+        expect { do_request }.not_to change { Session.count }
+      end
+
+      it "redirects to the new session path" do
+        do_request
+        expect(response).to redirect_to(new_session_path)
       end
     end
   end
