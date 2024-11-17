@@ -1,9 +1,8 @@
 class ProfilesController < ApplicationController
   before_action :set_profile, only: %i[ show edit update destroy ]
 
-  # GET /profiles
 
-  # GET /profiles/1
+  # GET /profile
   def show
   end
 

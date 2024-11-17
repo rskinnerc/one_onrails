@@ -10,4 +10,7 @@
 
     <%= button_to "Destroy this profile", @profile, method: :delete %>
   </div>
+<% else %>
+  <p>You don't have a profile yet.</p>
+  <%= link_to "Create a new profile", new_profile_path %>
 <% end %>
