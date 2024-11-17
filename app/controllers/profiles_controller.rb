@@ -42,7 +42,7 @@ class ProfilesController < ApplicationController
   # DELETE /profiles/1
   def destroy
     @profile.destroy!
-    redirect_to profiles_path, notice: "Profile was successfully destroyed.", status: :see_other
+    redirect_to profile_path, notice: "Profile was successfully destroyed.", status: :see_other
   end
 
   private

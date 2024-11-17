@@ -8,7 +8,7 @@
     <%= link_to "Edit this profile", edit_profile_path %> |
     <%= link_to "Back to profiles", profile_path %>
 
-    <%= button_to "Destroy this profile", @profile, method: :delete %>
+    <%= button_to "Destroy this profile", @profile, method: :delete, data: { turbo_confirm: 'Are you sure?'} %>
   </div>
 <% else %>
   <p>You don't have a profile yet.</p>
