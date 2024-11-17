@@ -5,7 +5,7 @@
   <%= render @profile %>
 
   <div>
-    <%= link_to "Edit this profile", edit_profile_path(@profile) %> |
+    <%= link_to "Edit this profile", edit_profile_path %> |
     <%= link_to "Back to profiles", profile_path %>
 
     <%= button_to "Destroy this profile", @profile, method: :delete %>

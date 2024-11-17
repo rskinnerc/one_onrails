@@ -26,6 +26,12 @@
     <%= form.text_field :phone %>
   </div>
 
+  <% if profile.avatar.attached? %>
+    <%= image_tag profile.avatar %>
+
+    <%= form.label 'Remove current avatar?' %>
+    <%= form.checkbox :remove_avatar %>
+  <% end %>
   <div>
     <%= form.label :avatar, style: "display: block" %>
     <%= form.file_field :avatar %>

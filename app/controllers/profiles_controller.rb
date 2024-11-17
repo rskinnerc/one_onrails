@@ -28,7 +28,11 @@ class ProfilesController < ApplicationController
 
   # PATCH/PUT /profiles/1
   def update
-    if @profile.update(profile_params)
+    if profile_params[:remove_avatar] == "1"
+      @profile.avatar.purge
+    end
+
+    if @profile.update(profile_params.except(:remove_avatar))
       redirect_to @profile, notice: "Profile was successfully updated.", status: :see_other
     else
       render :edit, status: :unprocessable_entity
@@ -49,6 +53,6 @@ class ProfilesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def profile_params
-      params.expect(profile: [ :first_name, :last_name, :phone, :avatar, :country ])
+      params.expect(profile: [ :first_name, :last_name, :phone, :avatar, :country, :remove_avatar ])
     end
 end
