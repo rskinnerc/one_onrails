@@ -2,9 +2,6 @@ class ProfilesController < ApplicationController
   before_action :set_profile, only: %i[ show edit update destroy ]
 
   # GET /profiles
-  def index
-    @profiles = Profile.all
-  end
 
   # GET /profiles/1
   def show
@@ -48,11 +45,11 @@ class ProfilesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_profile
-      @profile = Profile.find(params.expect(:id))
+      @profile = current_user.profile
     end
 
     # Only allow a list of trusted parameters through.
     def profile_params
-      params.expect(profile: [ :first_name, :last_name, :phone, :avatar, :country, :user_id ])
+      params.expect(profile: [ :first_name, :last_name, :phone, :avatar, :country ])
     end
 end

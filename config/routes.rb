@@ -1,9 +1,14 @@
 Rails.application.routes.draw do
-  resources :profiles
   get "home/index"
   resource :session
   resources :passwords, param: :token
   resources :registrations, only: %i[new create]
+
+  scope :account do
+    resource :profile
+  end
+
+  resolve("Profile") { [ :profile ] }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
