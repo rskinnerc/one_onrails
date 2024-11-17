@@ -8,7 +8,7 @@ class ProfilesController < ApplicationController
 
   # GET /profiles/new
   def new
-    @profile = Profile.new
+    @profile = current_user.build_profile
   end
 
   # GET /profiles/1/edit
@@ -17,7 +17,7 @@ class ProfilesController < ApplicationController
 
   # POST /profiles
   def create
-    @profile = Profile.new(profile_params)
+    @profile = current_user.build_profile(profile_params)
 
     if @profile.save
       redirect_to @profile, notice: "Profile was successfully created."
