@@ -9,6 +9,9 @@ class ProfilesController < ApplicationController
   end
 
   def edit
+    unless @profile.present?
+      redirect_to profile_path, notice: "Profile not found. Please create a new profile."
+    end
   end
 
   def create
@@ -34,6 +37,10 @@ class ProfilesController < ApplicationController
   end
 
   def destroy
+    unless @profile.present?
+      redirect_to profile_path, notice: "Profile not found. Please create a new profile."
+      return
+    end
     @profile.destroy!
     redirect_to profile_path, notice: "Profile was successfully destroyed.", status: :see_other
   end
