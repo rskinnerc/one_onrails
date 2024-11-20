@@ -1,27 +1,26 @@
 class AddressesController < ApplicationController
   before_action :set_address, only: %i[ show edit update destroy ]
 
-  # GET /addresses
   def index
-    @addresses = Address.all
+    @addresses = current_user.addresses.all
   end
 
-  # GET /addresses/1
   def show
   end
 
-  # GET /addresses/new
   def new
     @address = Address.new
   end
 
-  # GET /addresses/1/edit
   def edit
   end
 
-  # POST /addresses
   def create
-    @address = Address.new(address_params)
+    if address_params[:default] == "1"
+      current_user.addresses.update_all(default: false)
+    end
+
+    @address = current_user.addresses.build(address_params)
 
     if @address.save
       redirect_to @address, notice: "Address was successfully created."
@@ -30,8 +29,11 @@ class AddressesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /addresses/1
   def update
+    if address_params[:default] == "1"
+      current_user.addresses.update_all(default: false)
+    end
+
     if @address.update(address_params)
       redirect_to @address, notice: "Address was successfully updated.", status: :see_other
     else
@@ -39,19 +41,16 @@ class AddressesController < ApplicationController
     end
   end
 
-  # DELETE /addresses/1
   def destroy
     @address.destroy!
     redirect_to addresses_path, notice: "Address was successfully destroyed.", status: :see_other
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_address
-      @address = Address.find(params.expect(:id))
+      @address = current_user.addresses.find(params.expect(:id))
     end
 
-    # Only allow a list of trusted parameters through.
     def address_params
       params.expect(address: [ :address_line_1, :address_line_2, :city, :country, :state, :postal_code, :default ])
     end
