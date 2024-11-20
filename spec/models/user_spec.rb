@@ -5,6 +5,7 @@ RSpec.describe User, type: :model do
     it { should have_many(:sessions).dependent(:destroy) }
     it { should have_one(:profile).dependent(:destroy) }
     it { should have_secure_password }
+    it { should have_many(:addresses).dependent(:destroy) }
   end
 
   describe "validations" do
