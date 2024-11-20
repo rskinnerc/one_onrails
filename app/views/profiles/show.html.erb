@@ -1,0 +1,15 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Profile</h1>
+<% if @profile.present? %>
+  <%= render @profile %>
+
+  <div>
+    <%= link_to "Edit profile", edit_profile_path %> |
+
+    <%= button_to "Destroy this profile", @profile, method: :delete, data: { turbo_confirm: 'Are you sure?'} %>
+  </div>
+<% else %>
+  <p>You don't have a profile yet.</p>
+  <%= link_to "Create a new profile", new_profile_path %>
+<% end %>
