@@ -1,0 +1,11 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @address %>
+
+<div>
+  <%= link_to "Edit this address", edit_address_path(@address) %> |
+  <%= link_to "Back to addresses", addresses_path %>
+  <%= button_to "Make Default", make_default_address_path(@address), data: { turbo_confirm: "Are you sure?"}, method: :patch %>
+
+  <%= button_to "Destroy this address", @address, method: :delete %>
+</div>
