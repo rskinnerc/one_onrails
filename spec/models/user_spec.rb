@@ -6,6 +6,7 @@ RSpec.describe User, type: :model do
     it { should have_one(:profile).dependent(:destroy) }
     it { should have_secure_password }
     it { should have_many(:addresses).dependent(:destroy) }
+    it { should have_one(:default_address).conditions(default: true).class_name("Address") }
   end
 
   describe "validations" do
