@@ -6,7 +6,11 @@ Rails.application.routes.draw do
 
   scope :account do
     resource :profile
-    resources :addresses
+    resources :addresses do
+      member do
+        patch :make_default
+      end
+    end
   end
 
   resolve("Profile") { [ :profile ] }

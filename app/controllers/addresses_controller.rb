@@ -1,5 +1,5 @@
 class AddressesController < ApplicationController
-  before_action :set_address, only: %i[ show edit update destroy ]
+  before_action :set_address, only: %i[ show edit update destroy make_default ]
 
   def index
     @addresses = current_user.addresses.all
@@ -44,6 +44,15 @@ class AddressesController < ApplicationController
   def destroy
     @address.destroy!
     redirect_to addresses_path, notice: "Address was successfully destroyed.", status: :see_other
+  end
+
+  def make_default
+    current_user.addresses.update_all(default: false)
+    if @address.update(default: true)
+      redirect_to addresses_path, notice: "Default address was successfully updated.", status: :see_other
+    else
+      redirect_to addresses_path, notice: "Default address was not updated.", status: :unprocessable_entity
+    end
   end
 
   private

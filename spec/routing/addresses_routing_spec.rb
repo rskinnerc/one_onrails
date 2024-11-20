@@ -34,5 +34,9 @@ RSpec.describe AddressesController, type: :routing do
     it "routes to #destroy" do
       expect(delete: "/account/addresses/1").to route_to("addresses#destroy", id: "1")
     end
+
+    it "routes to #make_default" do
+      expect(patch: "/account/addresses/1/make_default").to route_to("addresses#make_default", id: "1")
+    end
   end
 end
