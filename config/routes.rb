@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   scope :account do
     resource :profile
+    resources :addresses
   end
 
   resolve("Profile") { [ :profile ] }
