@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_20_124320) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_21_103029) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -64,6 +64,22 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_20_124320) do
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
+  create_table "purchases", force: :cascade do |t|
+    t.integer "subscription_id", null: false
+    t.integer "user_id", null: false
+    t.integer "amount_cents", default: 0
+    t.integer "tax_amount_cents"
+    t.decimal "tax_rate", precision: 4, scale: 2, default: "0.0"
+    t.integer "total_amount_cents"
+    t.string "currency"
+    t.string "description"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["subscription_id"], name: "index_purchases_on_subscription_id"
+    t.index ["user_id"], name: "index_purchases_on_user_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "ip_address"
@@ -97,6 +113,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_20_124320) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "users"
   add_foreign_key "profiles", "users"
+  add_foreign_key "purchases", "subscriptions"
+  add_foreign_key "purchases", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "subscriptions", "users"
 end
