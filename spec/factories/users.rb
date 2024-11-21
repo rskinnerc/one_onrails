@@ -8,5 +8,11 @@ FactoryBot.define do
         create :subscription, user: user
       end
     end
+
+    trait :with_purchase do
+      after :create do |user|
+        create :purchase, user: user
+      end
+    end
   end
 end
