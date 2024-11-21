@@ -65,7 +65,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_21_103029) do
   end
 
   create_table "purchases", force: :cascade do |t|
-    t.integer "subscription_id", null: false
+    t.integer "subscription_id"
     t.integer "user_id", null: false
     t.integer "amount_cents", default: 0
     t.integer "tax_amount_cents"

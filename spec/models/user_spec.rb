@@ -8,6 +8,7 @@ RSpec.describe User, type: :model do
     it { should have_many(:addresses).dependent(:destroy) }
     it { should have_one(:default_address).conditions(default: true).class_name("Address") }
     it { should have_one(:subscription).dependent(:destroy) }
+    it { should have_many(:purchases).dependent(:destroy) }
   end
 
   describe "validations" do

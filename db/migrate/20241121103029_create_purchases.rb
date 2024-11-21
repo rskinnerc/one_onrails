@@ -1,7 +1,7 @@
 class CreatePurchases < ActiveRecord::Migration[8.0]
   def change
     create_table :purchases do |t|
-      t.references :subscription, null: false, foreign_key: true
+      t.references :subscription, null: true, foreign_key: true
       t.references :user, null: false, foreign_key: true
       t.integer :amount_cents, default: 0
       t.integer :tax_amount_cents
