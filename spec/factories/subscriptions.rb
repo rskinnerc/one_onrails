@@ -4,6 +4,6 @@ FactoryBot.define do
     start_date { "2024-11-20 07:43:21" }
     end_date { "2024-11-20 07:43:21" }
     trial_end_date { "2024-11-20 07:43:21" }
-    user { nil }
+    user
   end
 end
