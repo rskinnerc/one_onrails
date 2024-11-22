@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_22_111416) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_22_111649) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -108,6 +108,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_22_111416) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "plan_id", null: false
+    t.index ["plan_id"], name: "index_subscriptions_on_plan_id"
     t.index ["status"], name: "index_subscriptions_on_status"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
@@ -127,5 +129,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_22_111416) do
   add_foreign_key "purchases", "subscriptions"
   add_foreign_key "purchases", "users"
   add_foreign_key "sessions", "users"
+  add_foreign_key "subscriptions", "plans"
   add_foreign_key "subscriptions", "users"
 end
