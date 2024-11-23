@@ -9,4 +9,6 @@ class User < ApplicationRecord
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   validates :email_address, presence: true
+
+  enum :role, { regular: 0, admin: 1, super_admin: 2, banned: 3 }
 end
