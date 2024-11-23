@@ -5,6 +5,7 @@ RSpec.describe Subscription, type: :model do
     it { should belong_to(:user) }
     it { should have_many(:purchases) }
     it { should belong_to(:plan) }
+    it { should have_many(:billing_histories) }
   end
 
   describe "enums" do
