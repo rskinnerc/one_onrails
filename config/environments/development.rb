@@ -43,12 +43,12 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
 
   config.action_mailer.smtp_settings = {
-    user_name: ENV["MAILTRAP_SANDBOX_USERNAME"],
-    password: ENV["MAILTRAP_SANDBOX_PASSWORD"],
-    address: "sandbox.smtp.mailtrap.io",
-    host: "sandbox.smtp.mailtrap.io",
-    port: "2525",
-    authentication: :login
+    user_name: ENV["SMTP_USERNAME"],
+    password: ENV["SMTP_PASSWORD"],
+    address: ENV["SMTP_ADDRESS"],
+    host: ENV["SMTP_HOST"],
+    port: ENV["SMTP_PORT"],
+    authentication: ENV["SMTP_AUTHENTICATION"].to_sym
   }
 
   # Print deprecation notices to the Rails logger.
