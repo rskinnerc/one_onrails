@@ -19,4 +19,53 @@ RSpec.describe User, type: :model do
   describe "enums" do
     it { should define_enum_for(:role).with_values(%i[regular admin super_admin banned]) }
   end
+
+  describe "scopes" do
+    describe "default_scope" do
+      it "includes the subscription" do
+        expect(User.all.includes_values).to include(:subscription)
+      end
+    end
+  end
+
+  describe "methods" do
+    let(:subject) { create(:user) }
+    let!(:subscription) { create(:subscription, user: subject, plan: plan, status: status) }
+
+    describe "#has_active_subscription?" do
+      let(:plan) { create(:plan) }
+
+      context "when the user has an active subscription" do
+        let(:status) { :active }
+
+        it "returns true" do
+          expect(subject.has_active_subscription?).to be true
+        end
+      end
+
+      context "when the user has a trialing subscription" do
+        let(:status) { :trialing }
+
+        it "returns false" do
+          expect(subject.has_active_subscription?).to be false
+        end
+      end
+
+      context "when the user has a paused subscription" do
+        let(:status) { :paused }
+
+        it "returns false" do
+          expect(subject.has_active_subscription?).to be false
+        end
+      end
+
+      context "when the user has a canceled subscription" do
+        let(:status) { :canceled }
+
+        it "returns false" do
+          expect(subject.has_active_subscription?).to be false
+        end
+      end
+    end
+  end
 end
