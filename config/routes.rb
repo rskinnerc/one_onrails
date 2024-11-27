@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :subscriptions
   get "home/index"
   resource :session
   resources :passwords, param: :token
@@ -13,6 +12,7 @@ Rails.application.routes.draw do
         patch :make_default
       end
     end
+    resource :subscription
   end
 
   resolve("Profile") { [ :profile ] }
