@@ -12,19 +12,25 @@ Rails.application.routes.draw do
         patch :make_default
       end
     end
+    resource :subscription, only: %i[show]
   end
 
   resolve("Profile") { [ :profile ] }
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  flipper_app = Flipper::UI.app do |builder|
+    builder.use Rack::Auth::Basic do |username, password|
+      user = User.authenticate_by(email_address: username, password: password)
+
+      user&.super_admin?
+    end
+  end
+  mount flipper_app, at: "/flipper"
+
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  # Defines the root path route ("/")
   root "home#index"
 end

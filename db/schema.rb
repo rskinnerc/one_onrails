@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_20_004857) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_27_113345) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -53,6 +53,52 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_20_004857) do
     t.index ["user_id"], name: "index_addresses_on_user_id"
   end
 
+  create_table "billing_histories", force: :cascade do |t|
+    t.integer "subscription_id", null: false
+    t.integer "amount_cents"
+    t.string "currency"
+    t.integer "event_type"
+    t.datetime "event_date"
+    t.text "metadata"
+    t.integer "tax_amount_cents"
+    t.integer "total_amount_cents"
+    t.decimal "tax_rate", precision: 4, scale: 2
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["subscription_id"], name: "index_billing_histories_on_subscription_id"
+    t.index ["user_id"], name: "index_billing_histories_on_user_id"
+  end
+
+  create_table "flipper_features", force: :cascade do |t|
+    t.string "key", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_flipper_features_on_key", unique: true
+  end
+
+  create_table "flipper_gates", force: :cascade do |t|
+    t.string "feature_key", null: false
+    t.string "key", null: false
+    t.text "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
+  end
+
+  create_table "plans", force: :cascade do |t|
+    t.string "name"
+    t.integer "price_cents"
+    t.string "currency"
+    t.integer "trial_duration_days"
+    t.text "description"
+    t.boolean "public"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "initial_subscription", default: false
+    t.index ["initial_subscription"], name: "index_plans_on_initial_subscription", unique: true
+  end
+
   create_table "profiles", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -64,6 +110,22 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_20_004857) do
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
+  create_table "purchases", force: :cascade do |t|
+    t.integer "subscription_id"
+    t.integer "user_id", null: false
+    t.integer "amount_cents", default: 0
+    t.integer "tax_amount_cents"
+    t.decimal "tax_rate", precision: 4, scale: 2, default: "0.0"
+    t.integer "total_amount_cents"
+    t.string "currency"
+    t.string "description"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["subscription_id"], name: "index_purchases_on_subscription_id"
+    t.index ["user_id"], name: "index_purchases_on_user_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "ip_address"
@@ -73,17 +135,38 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_20_004857) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.integer "status"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.datetime "trial_end_date"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "plan_id", null: false
+    t.index ["plan_id"], name: "index_subscriptions_on_plan_id"
+    t.index ["status"], name: "index_subscriptions_on_status"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email_address", null: false
     t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "role", default: 0
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "users"
+  add_foreign_key "billing_histories", "subscriptions"
+  add_foreign_key "billing_histories", "users"
   add_foreign_key "profiles", "users"
+  add_foreign_key "purchases", "subscriptions"
+  add_foreign_key "purchases", "users"
   add_foreign_key "sessions", "users"
+  add_foreign_key "subscriptions", "plans"
+  add_foreign_key "subscriptions", "users"
 end

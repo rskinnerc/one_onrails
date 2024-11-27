@@ -1,10 +1,27 @@
 require 'rails_helper'
 
+RSpec.shared_examples "when registrations flag is disabled" do
+  before do
+    Flipper.enable(:registrations)
+  end
+
+  it "redirects to the root path" do
+    do_request
+    expect(response).to redirect_to(root_path)
+  end
+
+  it "displays a alert flash message" do
+    do_request
+    expect(flash[:alert]).to eq("Registrations are currently disabled.")
+  end
+end
+
 RSpec.describe "Registrations", type: :request do
   let(:user) { create(:user) }
 
   before do
     user
+    Flipper.enable(:registrations)
   end
 
   describe "GET /new" do
@@ -46,8 +63,17 @@ RSpec.describe "Registrations", type: :request do
       }
     }
 
+    before do
+      allow(Users::CreateInitialSubscription).to receive(:call).and_call_original
+    end
+
     it "creates a new user" do
       expect { do_request }.to change { User.count }.by(1)
+    end
+
+    it "calls the CreateInitialSubscription service" do
+      expect(Users::CreateInitialSubscription).to receive(:call)
+      do_request
     end
 
     it "creates a new session" do
@@ -67,6 +93,11 @@ RSpec.describe "Registrations", type: :request do
           password_confirmation: 'password'
         }
       }
+
+      it "does not call the CreateInitialSubscription service" do
+        expect(Users::CreateInitialSubscription).not_to receive(:call)
+        do_request
+      end
 
       it "does not create a new user" do
         expect { do_request }.not_to change { User.count }
