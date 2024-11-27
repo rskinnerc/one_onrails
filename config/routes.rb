@@ -12,7 +12,7 @@ Rails.application.routes.draw do
         patch :make_default
       end
     end
-    resource :subscription
+    resource :subscription, only: %i[show]
   end
 
   resolve("Profile") { [ :profile ] }
