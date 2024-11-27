@@ -1,10 +1,27 @@
 require 'rails_helper'
 
+RSpec.shared_examples "when registrations flag is disabled" do
+  before do
+    Flipper.enable(:registrations)
+  end
+
+  it "redirects to the root path" do
+    do_request
+    expect(response).to redirect_to(root_path)
+  end
+
+  it "displays a alert flash message" do
+    do_request
+    expect(flash[:alert]).to eq("Registrations are currently disabled.")
+  end
+end
+
 RSpec.describe "Registrations", type: :request do
   let(:user) { create(:user) }
 
   before do
     user
+    Flipper.enable(:registrations)
   end
 
   describe "GET /new" do
