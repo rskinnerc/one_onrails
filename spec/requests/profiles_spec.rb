@@ -17,10 +17,11 @@ RSpec.describe "/account/profile", type: :request do
   let(:invalid_attributes) {
     {
       profile: {
-        first_name: nil,
-        last_name: nil,
+        first_name: '',
+        last_name: '',
         phone: nil,
-        country: nil
+        country: nil,
+        remove_avatar: "0"
       }
     }
   }
@@ -126,7 +127,7 @@ RSpec.describe "/account/profile", type: :request do
       end
 
       context "with invalid parameters" do
-        let(:params) { invalid_attributes }
+        let(:params) { { profile: invalid_attributes[:profile].except(:remove_avatar) } }
 
         it "does not create a new Profile" do
           expect {
@@ -137,6 +138,22 @@ RSpec.describe "/account/profile", type: :request do
         it "renders a successful response (i.e. to display the 'new' template)" do
           do_request
           expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        context "when the request includes an avatar" do
+          let(:avatar) { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'files', 'avatar.jpg'), 'image/jpeg') }
+          let(:params) { { profile: invalid_attributes[:profile].except(:remove_avatar).merge(avatar: avatar) } }
+
+          it "does not create a new Profile" do
+            expect {
+              do_request
+            }.to change(Profile, :count).by(0)
+          end
+
+          it "renders a successful response (i.e. to display the 'new' template)" do
+            do_request
+            expect(response).to have_http_status(:unprocessable_entity)
+          end
         end
       end
     end
@@ -210,6 +227,16 @@ RSpec.describe "/account/profile", type: :request do
         it "renders a successful response (i.e. to display the 'edit' template)" do
           do_request
           expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        context "when the request includes an avatar" do
+          let(:avatar) { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'files', 'avatar.jpg'), 'image/jpeg') }
+          let(:params) { { profile: invalid_attributes[:profile].merge(avatar: avatar) } }
+
+          it "renders a successful response (i.e. to display the 'edit' template)" do
+            do_request
+            expect(response).to have_http_status(:unprocessable_entity)
+          end
         end
       end
     end

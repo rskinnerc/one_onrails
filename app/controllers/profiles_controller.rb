@@ -15,7 +15,8 @@ class ProfilesController < ApplicationController
   end
 
   def create
-    @profile = current_user.build_profile(profile_params)
+    @profile = current_user.build_profile(profile_params.except(:avatar))
+    @profile.avatar.attach(profile_params[:avatar]) if profile_params[:avatar].present? && @profile.valid?
 
     if @profile.save
       redirect_to @profile, notice: "Profile was successfully created."
@@ -29,7 +30,11 @@ class ProfilesController < ApplicationController
       @profile.avatar.purge
     end
 
-    if @profile.update(profile_params.except(:remove_avatar))
+    @profile.assign_attributes(profile_params.except(:avatar, :remove_avatar))
+
+    @profile.avatar.attach(profile_params[:avatar]) if profile_params[:avatar].present? && @profile.valid?
+
+    if @profile.save
       redirect_to @profile, notice: "Profile was successfully updated.", status: :see_other
     else
       render :edit, status: :unprocessable_entity
