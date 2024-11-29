@@ -1,11 +1,27 @@
-<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
-<%= tag.div(flash[:notice], style: "color:green") if flash[:notice] %>
+<div class="mx-auto w-full sm:w-96 mt-24 p-2 flex flex-col gap-8">
+  <%= form_with url: session_path, class: 'card shadow-md' do |form| %>
+    <div class="card-body">
+      <div class="card-title">
+        Sign In!
+      </div>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: 'input input-bordered' %>
+    
+      <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, class: 'input input-bordered' %>
 
-<%= form_with url: session_path do |form| %>
-  <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address] %><br>
-  <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72 %><br>
-  <%= form.submit "Sign in" %>
-<% end %>
-<br>
+      <div class="card-actions justify-end">
+        <%= form.submit "Sign in", class: 'btn btn-sm btn-accent' %>
+      </div>
+    </div>
+  <% end %>
+  
+  <div class="card shadow-md p-8 gap-4">
+    <%= link_to "Forgot password?", new_password_path, class: 'text-accent font-medium underline decoration-accent decoration-1' %>
 
-<%= link_to "Forgot password?", new_password_path %>
+    <% if registrations_enabled? %>
+      <p>
+        Don't have an account?
+        <%= link_to "Sign up", new_registration_path, class: 'text-accent font-medium underline decoration-accent decoration-1' %> here!
+      </p>
+    <% end %>
+  </div>
+</div>
