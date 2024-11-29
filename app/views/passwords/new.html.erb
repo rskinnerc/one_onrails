@@ -1,8 +1,26 @@
-<h1>Forgot your password?</h1>
+<div class="mx-auto w-full sm:w-96 mt-24 p-2 flex flex-col gap-8">
+  <%= form_with url: passwords_path, class:'card shadow-md' do |form| %>
+    <div class="card-body">
+      <div class="card-title">
+        Forgot your password?
+      </div>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: 'input input-bordered' %>
+      <div class="card-actions justify-end">
+        <%= form.submit "Email reset instructions", class: 'btn btn-sm btn-accent' %>
+      </div>
+    </div>
+  <% end %>
 
-<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
+  <div class="card shadow-md p-8 gap-4">
+    <p>
+      Or <%= link_to "sign In", new_session_path, class: 'text-accent font-medium underline decoration-accent decoration-1' %> instead.
+    </p>
 
-<%= form_with url: passwords_path do |form| %>
-  <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address] %><br>
-  <%= form.submit "Email reset instructions" %>
-<% end %>
+    <% if registrations_enabled? %>
+      <p>
+        Don't have an account?
+        <%= link_to "Sign up", new_registration_path, class: 'text-accent font-medium underline decoration-accent decoration-1' %> here!
+      </p>
+    <% end %>
+  </div>
+</div>
