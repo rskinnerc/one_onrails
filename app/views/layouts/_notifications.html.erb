@@ -1,7 +1,7 @@
 
 <% if flash[:notice] %>
-  <div class="fixed p-2 inset-x-0 sm:w-1/2 md:w1/3 mx-auto">
-    <div role="alert" class="alert alert-success">
+  <div class="fixed p-2 inset-x-0 sm:w-1/2 md:w1/3 mx-auto" data-controller="notifications">
+    <div role="alert" class="opacity-80 alert alert-success">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6 shrink-0 stroke-current"
@@ -17,8 +17,8 @@
     </div>
   </div>
 <% elsif flash[:alert] %>
-  <div class="fixed p-2 inset-x-0 sm:w-1/2 md:w1/3 mx-auto">
-    <div role="alert" class="alert alert-warning">
+  <div class="fixed p-2 inset-x-0 sm:w-1/2 md:w1/3 mx-auto" data-controller="notifications">
+    <div role="alert" class="opacity-80 alert alert-warning">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6 shrink-0 stroke-current"
