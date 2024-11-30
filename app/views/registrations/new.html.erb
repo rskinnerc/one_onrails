@@ -6,8 +6,8 @@
         Sign Up!
       </div>
       <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: 'input input-bordered' %>
-      <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, class: 'input input-bordered' %>
-      <%= form.password_field :password_confirmation, placeholder: 'Confirm your password', class: 'input input-bordered' %>
+      <%= form.password_field :password, required: true, autocomplete: "password", placeholder: "Enter your password", maxlength: 72, class: 'input input-bordered' %>
+      <%= form.password_field :password_confirmation, autocomplete: "password-confirmation", placeholder: 'Confirm your password', class: 'input input-bordered' %>
       <div class="card-actions justify-end">
         <%= form.submit "Sign up", class: 'btn btn-sm btn-accent' %>
       </div>
