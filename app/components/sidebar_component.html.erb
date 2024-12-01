@@ -1,0 +1,16 @@
+<div class="w-80 h-full flex flex-col p-2 bg-base-200">
+  <ul class="menu rounded-box">
+    <li><a>Dashboard</a></li>
+    <li>
+      <details <%= %w(account profiles addresses subscriptions).include?(controller_name) && 'open'%> >
+        <summary>Account</summary>
+        <ul>
+          <li><%= link_to 'Summary', account_path, class: active_class?('account') %></li>
+          <li><%= link_to 'Profile', profile_path, class: active_class?('profiles') %></li>
+          <li><%= link_to 'Addresses', addresses_path, class: active_class?('addresses') %></li>
+          <li><%= link_to 'Billing & Subscription', subscription_path, class: active_class?('subscriptions') %></li>
+        </ul>
+      </details>
+    </li>
+  </ul>
+</div>

@@ -1,3 +1,5 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :sidebar do %>
+  <% render SidebarComponent.new(controller: controller) %>
+<% end %>
 
 Subscription ID: <%= @subscription&.id %><br>
