@@ -9,7 +9,5 @@ class SidebarComponent < ViewComponent::Base
     controller.controller_name == controller_name ? "active" : ""
   end
 
-  private
-
   attr_reader :controller
 end
