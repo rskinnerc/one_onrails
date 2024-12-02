@@ -9,17 +9,17 @@
     
     <% if content_for? :sidebar %>
       <div class="drawer lg:drawer-open">
-        <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+        <input id="main-drawer" type="checkbox" class="drawer-toggle" data-application-target="mainDrawerToggle" />
         <div class="drawer-content">
-          <!-- Page content here -->
-          <label for="my-drawer-2" class="btn btn-primary drawer-button lg:hidden">
-            Open drawer
+          <label class="swap swap-rotate fixed bottom-3 left-3 z-40 lg:hidden" data-action="click->application#toggleSidebar:prevent">
+            <input type="checkbox" data-application-target="togglerSwap" />
+            <%= render Icons::HamburgerMenuComponent.new(classes: 'h-12 w-12 fill-current swap-off') %>
+            <%= render Icons::CloseCircleComponent.new(classes: 'h-12 w-12 fill-current swap-on') %>
           </label>
-
           <%= yield %>
         </div>
         <div class="drawer-side">
-          <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
+          <label aria-label="close sidebar" class="drawer-overlay" data-action="click->application#toggleSidebar:prevent" ></label>
           <%= yield :sidebar %>
         </div>
       </div>

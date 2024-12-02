@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="application"
 export default class extends Controller {
-  static targets = [ "themeController" ]
+  static targets = [ "themeController", "togglerSwap", "mainDrawerToggle" ]
   initialize() {
     let theme = localStorage.getItem('theme')
     if (theme) {
@@ -16,5 +16,10 @@ export default class extends Controller {
     } else {
       localStorage.removeItem('theme')
     }
+  }
+
+  toggleSidebar() {
+    this.togglerSwapTarget.checked = !this.togglerSwapTarget.checked  
+    this.mainDrawerToggleTarget.checked = !this.mainDrawerToggleTarget.checked
   }
 }
