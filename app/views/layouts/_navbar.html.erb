@@ -2,12 +2,31 @@
   <div class="flex-1">
     <%= link_to 'One OnRails', root_path, class: 'font-bold text-lg' %>
   </div>
-  <div class="flex-none">
+  <div class="flex-none flex gap-2 items-center">
     <label class="swap swap-rotate">
       <input type="checkbox" class="theme-controller" value="night" data-application-target="themeController" data-action="click->application#saveTheme" />
 
       <%= render Icons::SunComponent.new(classes: 'swap-off h-8 w-8 fill-current') %>
       <%= render Icons::MoonStarsComponent.new(classes: 'swap-on h-8 w-8 fill-current') %>
     </label>
+    <div class="dropdown dropdown-end">
+      <% if authenticated? %>
+        <div tabindex="0" role="button">
+          <% if current_user.profile&.avatar&.attached? %>
+            <%= image_tag current_user.profile.avatar, class: 'rounded-full h-8 w-8' %>
+          <% else %>
+            <%= render Icons::UserCircleComponent.new(classes: 'h-8 w-8 fill-current') %>
+          <% end %>
+        </div>
+        <ul
+          tabindex="0"
+          class="menu dropdown-content rounded-box z-[1] mt-4 w-52 p-2 shadow bg-base-200">
+          <li><%= link_to 'Your account', account_path %></li>
+          <li><%= button_to 'Logout', session_path, method: :delete, class: 'text-start w-full', form_class: 'inline-block' %></li>
+        </ul>
+      <% else %>
+
+      <% end %>
+    </div>
   </div>
 </div>
