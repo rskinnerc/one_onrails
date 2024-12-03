@@ -16,7 +16,11 @@
             <%= render Icons::HamburgerMenuComponent.new(classes: 'h-10 sm:h-12 sm:w-12 w-10 sm:h-12 sm:w-12 fill-current swap-off') %>
             <%= render Icons::CloseCircleComponent.new(classes: 'h-10 sm:h-12 sm:w-12 w-10 sm:h-12 sm:w-12 fill-current swap-on') %>
           </label>
-          <%= yield %>
+          <div class="pt-4 px-2 sm:px-4 h-screen bg-base-200">
+            <div class="rounded-t-xl pt-4 px-4 bg-base-300 h-full">
+              <%= yield %>
+            </div>
+          </div>
         </div>
         <div class="drawer-side">
           <label aria-label="close sidebar" class="drawer-overlay" data-action="click->application#toggleSidebar:prevent" ></label>
@@ -24,8 +28,10 @@
         </div>
       </div>
     <% else %>
-      <div class="w-full">
-        <%= yield %>
+      <div class="pt-4 px-2 sm:px-4 h-screen bg-base-200">
+        <div class="rounded-t-xl bg-base-300 pt-4 px-4 h-full">
+          <%= yield %>
+        </div>
       </div>
     <% end %>
   </body>
