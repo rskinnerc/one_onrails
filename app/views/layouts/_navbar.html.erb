@@ -25,7 +25,9 @@
           <li><%= button_to 'Logout', session_path, method: :delete, class: 'text-start w-full', form_class: 'inline-block' %></li>
         </ul>
       <% else %>
-
+        <%= link_to new_session_path do %>
+          <%= render Icons::LockKeyholeMinimalisticComponent.new(classes: 'h-8 w-8 fill-current') %>
+        <% end %>
       <% end %>
     </div>
   </div>
