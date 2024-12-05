@@ -1,5 +1,22 @@
 <% content_for :sidebar do %>
   <% render SidebarComponent.new(controller: controller) %>
 <% end %>
-<h1>Account#index</h1>
-<p>Find me in app/views/account/index.html.erb</p>
+
+<div class="grid grid-cols-12 gap-4">
+  <h1 class="col-span-12 font-semibold h-max">Account overview</h1>
+  <div class="col-span-12 md:col-span-6 card card-compact bg-base-200 shadow">
+    <div class="card-body !flex-row justify-between">
+      <div class="flex gap-2">
+        Subscription Status:
+        <%= render Subscription::StatusBadgeComponent.new(subscription: @subscription)%>
+      </div>
+      <%= render Subscription::ExpiryDateComponent.new(subscription: @subscription) %>
+    </div>
+  </div>
+  <div class="col-span-12 md:col-span-6 md:order-2">
+    Profile
+  </div>
+  <div class="col-span-12 md:col-span-6 md:order-1">
+    Addresses
+  </div>
+</div>

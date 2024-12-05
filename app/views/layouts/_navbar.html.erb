@@ -21,8 +21,8 @@
         <ul
           tabindex="0"
           class="menu dropdown-content rounded-box z-[1] mt-4 w-52 p-2 shadow bg-base-200">
-          <li><%= link_to 'Your account', account_path %></li>
-          <li><%= button_to 'Logout', session_path, method: :delete, class: 'text-start w-full', form_class: 'inline-block' %></li>
+          <li><%= link_to 'Your account', account_path, class: 'text-md' %></li>
+          <li><%= button_to 'Logout', session_path, method: :delete, class: 'text-start w-full text-md', form_class: 'inline-block' %></li>
         </ul>
       <% else %>
         <%= link_to new_session_path do %>
