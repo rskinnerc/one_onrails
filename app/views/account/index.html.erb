@@ -2,57 +2,59 @@
   <% render SidebarComponent.new(controller: controller) %>
 <% end %>
 
-<div class="grid grid-cols-12 gap-4">
-  <h1 class="col-span-12 font-semibold text-lg">Account overview</h1>
-  <div class="col-span-12 md:col-span-6 card card-compact bg-base-200 shadow">
-    <div class="card-body !flex-row justify-between">
-      <div class="flex gap-2">
-        Subscription Status:
-        <%= render Subscription::StatusBadgeComponent.new(subscription: @subscription)%>
+
+<h1 class="col-span-12 font-semibold text-lg">Account overview</h1>
+
+<div class="col-span-12 md:col-span-6 card card-compact bg-base-200 shadow">
+  <div class="card-body !flex-row justify-between">
+    <div class="flex gap-2">
+      Subscription Status:
+      <%= render Subscription::StatusBadgeComponent.new(subscription: @subscription)%>
+    </div>
+    <%= render Subscription::ExpiryDateComponent.new(subscription: @subscription) %>
+  </div>
+</div>
+
+<div class="col-span-12 md:col-span-6 md:order-2 card card-compact bg-base-200 shadow">
+  <div class="card-body">
+    <% if @profile.present? %>
+      <div class="flex gap-4 items-center">
+        <% if @profile.avatar&.attached? %>
+          <%= image_tag current_user.profile.avatar, class: 'rounded-full h-12 w-12' %>
+        <% else %>
+          <%= render Icons::UserCircleComponent.new(classes: 'w-12 h-12 fill-current') %>
+        <% end %>
+        <div>
+          <h3 class="font-semibold"><%= @profile.first_name %> <%= @profile.last_name %></h3>
+          <%= link_to 'Edit profile', edit_profile_path, class: 'text-xs text-secondary' %>
+        </div>
       </div>
-      <%= render Subscription::ExpiryDateComponent.new(subscription: @subscription) %>
-    </div>
+    <% else %>
+      <div class="flex flex-col items-center p-4 gap-4 justify-center">
+        <p class="text-sm">You have not yet created a profile.</p>
+        <%= link_to 'Create Profile', new_profile_path, class: 'btn btn-accent btn-sm' %>
+      </div>
+    <% end %>
   </div>
-  <div class="col-span-12 md:col-span-6 md:order-2 card card-compact bg-base-200 shadow">
-    <div class="card-body">
-      <% if @profile.present? %>
-        <div class="flex gap-4 items-center">
-          <% if @profile.avatar&.attached? %>
-            <%= image_tag current_user.profile.avatar, class: 'rounded-full h-12 w-12' %>
-          <% else %>
-            <%= render Icons::UserCircleComponent.new(classes: 'w-12 h-12 fill-current') %>
-          <% end %>
-          <div>
-            <h3 class="font-semibold"><%= @profile.first_name %> <%= @profile.last_name %></h3>
-            <%= link_to 'Edit profile', edit_profile_path, class: 'text-xs text-secondary' %>
-          </div>
-        </div>
-      <% else %>
-        <div class="flex flex-col items-center p-4 gap-4 justify-center">
-          <p class="text-sm">You have not yet created a profile.</p>
-          <%= link_to 'Create Profile', new_profile_path, class: 'btn btn-accent btn-sm' %>
-        </div>
-      <% end %>
-    </div>
-  </div>
-  <div class="col-span-12 md:col-span-6 row-span-2 md:order-1 card card-compact bg-base-200 shadow">
-    <div class="card-body">
-      <h2 class="font-semibold flex gap-4 items-center">Addresses <%= link_to 'View all', addresses_path, class: 'text-xs text-secondary font-normal' %></h2>
-      <% if @addresses.length.zero? %>
-        <div class="flex flex-col items-center p-4 gap-4 justify-center">
-          <p class="text-sm">You don't have any addresses yet.</p>
-          <%= link_to 'Add Address', new_address_path, class: 'btn btn-accent btn-sm' %>
-        </div>
-      <% else %>
-        <ul>
-          <% @addresses.each do |address| %>
-            <li class="flex gap-4 items-center pt-2">
-              <%= render Icons::EarthComponent.new(classes: 'fill-current w-6 h-6') %>
-              <span><%= address.to_s  %></span>
-            </li>
-          <% end %>
-        </ul>
-      <% end %>
-    </div>
+</div>
+
+<div class="col-span-12 md:col-span-6 row-span-2 md:order-1 card card-compact bg-base-200 shadow">
+  <div class="card-body">
+    <h2 class="font-semibold flex gap-4 items-center">Addresses <%= link_to 'View all', addresses_path, class: 'text-xs text-secondary font-normal' %></h2>
+    <% if @addresses.length.zero? %>
+      <div class="flex flex-col items-center p-4 gap-4 justify-center">
+        <p class="text-sm">You don't have any addresses yet.</p>
+        <%= link_to 'Add Address', new_address_path, class: 'btn btn-accent btn-sm' %>
+      </div>
+    <% else %>
+      <ul>
+        <% @addresses.each do |address| %>
+          <li class="flex gap-4 items-center pt-2">
+            <%= render Icons::EarthComponent.new(classes: 'fill-current w-6 h-6') %>
+            <span><%= address.to_s  %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
   </div>
 </div>
