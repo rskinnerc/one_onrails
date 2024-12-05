@@ -9,6 +9,6 @@ class AccountController < ApplicationController
   def set_overview_data
     @profile = current_user.profile
     @subscription = current_user.subscription
-    @addresses = current_user.addresses
+    @addresses = current_user.addresses.take(2)
   end
 end
