@@ -26,9 +26,10 @@
             </p>
           <% end %>
           <% if @profile.country.present? %>
-            <p class="flex items-center gap-2">
+            <p class="flex items-center gap-2" data-controller="country" data-country-country-code-value="<%= @profile.country.downcase %>">
               <%= render Icons::EarthComponent.new(classes: 'h-6 h-6 fill-current') %>
-              <%= @profile.country.upcase %>
+              <span class="loading loading-dots loading-xs" data-country-target="loadingCountries"></span>
+              <span data-country-target="countryContainer" class="hidden" ></span>
             </p>
           <% end %>
           <%= link_to 'Edit profile', edit_profile_path, class: 'text-xs text-secondary mt-4' %>
