@@ -37,9 +37,9 @@
     <%= form.file_field :avatar %>
   </div>
 
-  <div>
+  <div data-controller="countries-select" data-countries-select-current-value="<%= profile&.country&.downcase %>">
     <%= form.label :country, style: "display: block" %>
-    <%= form.text_field :country %>
+    <%= form.select :country, [['', '']], {}, data: { "countries-select-target": "selector" } %>
   </div>
 
   <div>

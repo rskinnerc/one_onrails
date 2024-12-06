@@ -7,6 +7,9 @@ import { application } from "./application"
 import ApplicationController from "./application_controller"
 application.register("application", ApplicationController)
 
+import CountriesSelectController from "./countries_select_controller"
+application.register("countries-select", CountriesSelectController)
+
 import CountryController from "./country_controller"
 application.register("country", CountryController)
 
