@@ -11,38 +11,56 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :first_name, style: "display: block" %>
-    <%= form.text_field :first_name %>
+  <label class="form-control">
+    <div class="label">
+      <span class="label-text">First name</span>
+    </div>
+    <%= form.text_field :first_name, class: "input input-bordered #{'input-error' if profile.errors[:first_name].any?}" %>
+  </label>
+
+  <label class="form-control">
+    <div class="label">
+      <span class="label-text">Last name</span>
+    </div>
+    <%= form.text_field :last_name, class: "input input-bordered #{'input-error' if profile.errors[:last_name].any?}" %>
+  </label>
+
+  <label class="form-control">
+    <div class="label">
+      <span class="label-text">Phone</span>
+    </div>
+    <%= form.text_field :phone, class: "input input-bordered #{'input-error' if profile.errors[:phone].any?}" %> 
+  </label>
+
+  <div class="flex flex-col">
+    <% if profile.avatar.attached? %>
+      <div class="flex items-center gap-4 pt-4">
+        <%= image_tag profile.avatar, class: 'w-16 h-16 rounded-full' %>
+
+        <div class="form-control">
+          <label class="label cursor-pointer justify-start gap-4">
+            <span class="label-text">Remove current avatar?</span>
+            <%= form.checkbox :remove_avatar, class: 'checkbox checkbox-sm' %>
+          </label>
+        </div>
+      </div>
+    <% end %>
+    <label class="form-control w-full">
+      <div class="label">
+        <span class="label-text">Avatar</span>
+      </div>
+      <%= form.file_field :avatar, class: "file-input file-input-bordered #{'file-input-error' if profile.errors[:avatar].any?}" %>
+    </label>
   </div>
 
-  <div>
-    <%= form.label :last_name, style: "display: block" %>
-    <%= form.text_field :last_name %>
-  </div>
+  <label class="form-control" data-controller="countries-select" data-countries-select-current-value="<%= profile&.country&.downcase %>">
+    <div class="label">
+      <span class="label-text">Country</span>
+    </div>
+    <%= form.select :country, [['', '']], {}, class: "select select-bordered #{'select-error' if profile.errors[:country].any?}", data: { "countries-select-target": "selector" } %>
+  </label>
 
-  <div>
-    <%= form.label :phone, style: "display: block" %>
-    <%= form.text_field :phone %>
-  </div>
-
-  <% if profile.avatar.attached? %>
-    <%= image_tag profile.avatar %>
-
-    <%= form.label 'Remove current avatar?' %>
-    <%= form.checkbox :remove_avatar %>
-  <% end %>
-  <div>
-    <%= form.label :avatar, style: "display: block" %>
-    <%= form.file_field :avatar %>
-  </div>
-
-  <div data-controller="countries-select" data-countries-select-current-value="<%= profile&.country&.downcase %>">
-    <%= form.label :country, style: "display: block" %>
-    <%= form.select :country, [['', '']], {}, data: { "countries-select-target": "selector" } %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class="py-4">
+    <%= form.submit class: 'btn btn-accent btn-sm' %>
   </div>
 <% end %>
