@@ -13,8 +13,13 @@
         <% else %>
           <%= render Icons::UserCircleComponent.new(classes: 'w-24 h-24 fill-current') %>
         <% end %>
-        <div class="flex flex-col gap-2 justify-start">
-          <h3 class="font-semibold text-lg mb-4"><%= @profile.first_name %> <%= @profile.last_name %></h3>
+        <div class="flex flex-col gap-2 w-full">
+          <%= button_to profile_path, method: :delete, data: { 'turbo-confirm': 'Are you sure?' }, class: 'absolute top-4 right-4 cursor-pointer h-6' do %>
+            <%= render Icons::TrashBinMinimalisticComponent.new(classes: 'h-6 w-6 fill-error') %>
+          <% end %>
+          <h3 class="font-semibold text-lg mb-4">
+            <%= [@profile.first_name, @profile.last_name].join(' ') %>
+          </h3>
           <p class="flex items-center gap-2">
             <%= render Icons::LetterComponent.new(classes: 'h-6 h-6 fill-current') %>
             <%= current_user.email_address %>
