@@ -2,7 +2,7 @@
   <div class="flex-1">
     <%= link_to 'One OnRails', root_path, class: 'font-bold text-lg' %>
   </div>
-  <div class="flex-none flex gap-2 items-center">
+  <div class="flex-none flex gap-2 items-baseline">
     <label class="swap swap-rotate">
       <input type="checkbox" class="theme-controller" value="night" data-application-target="themeController" data-action="click->application#saveTheme" />
 
@@ -11,12 +11,14 @@
     </label>
     <div class="dropdown dropdown-end">
       <% if authenticated? %>
-        <div tabindex="0" role="button">
-          <% if current_user.profile&.avatar&.attached? %>
-            <%= image_tag current_user.profile.avatar, class: 'rounded-full h-8 w-8' %>
-          <% else %>
-            <%= render Icons::UserCircleComponent.new(classes: 'h-8 w-8 fill-current') %>
-          <% end %>
+        <div tabindex="0" role="button" class="avatar">
+          <div class="rounded-full w-8">
+            <% if current_user.profile&.avatar&.attached? %>
+              <%= image_tag current_user.profile.avatar %>
+            <% else %>
+              <%= render Icons::UserCircleComponent.new(classes: 'fill-current') %>
+            <% end %>
+          </div>
         </div>
         <ul
           tabindex="0"
