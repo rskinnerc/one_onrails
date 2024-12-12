@@ -1,7 +1,7 @@
 <div class="card card-compact bg-base-200 shadow" id="<%= dom_id address %>">
   <div class="card-body">
     <% if address.default? %>
-      <div class="badge badge-accent badge-outline badge-sm">
+      <div class="badge badge-accent badge-sm">
         Default
       </div>
     <% end %>
@@ -30,8 +30,16 @@
       <span data-country-target="countryContainer" class="hidden" ></span>
     </p>
 
-    <% if controller.action_name == 'index' %>
-      <%= link_to 'View details', address_path(address), class: 'text-xs self-start text-secondary' %>
-    <% end %>
+    <div class="flex items-center justify-end gap-2">
+      <% if controller.action_name == 'index' %>
+        <%= link_to 'View details', address_path(address), class: 'btn btn-secondary btn-xs btn-outline' %>
+      <% elsif controller.action_name == 'show' %>
+        <%= link_to 'Edit address', edit_address_path(address), class: 'btn btn-secondary btn-xs btn-outline' %>
+        <%= button_to "Make default", make_default_address_path(@address), data: { turbo_confirm: "Are you sure?"}, method: :patch, class: 'btn btn-xs btn-neutral btn-outline' %>
+        <%= button_to address, method: :delete, data: { 'turbo-confirm': 'Are you sure?' }, class: 'cursor-pointer h-6' do %>
+          <%= render Icons::TrashBinMinimalisticComponent.new(classes: 'h-6 w-6 fill-error') %>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 </div>
