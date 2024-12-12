@@ -11,42 +11,58 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :address_line_1, style: "display: block" %>
-    <%= form.text_field :address_line_1 %>
+  <label class="form-control" data-controller="countries-select" data-countries-select-current-value="<%= address&.country&.downcase %>">
+    <div class="label">
+      <span class="label-text">Country</span>
+    </div>
+    <%= form.select :country, [['', '']], {}, class: "select select-bordered #{'select-error' if address.errors[:country].any?}", data: { "countries-select-target": "selector" } %>
+  </label>
+
+  <label class="form-control">
+    <div class="label">
+      <span class="label-text">City</span>
+    </div>
+    <%= form.text_field :city, class: "input input-bordered #{'input-error' if address.errors[:city].any?}" %>
+  </label>
+
+  <label class="form-control">
+    <div class="label">
+      <span class="label-text">State</span>
+    </div>
+    <%= form.text_field :state, class: "input input-bordered #{'input-error' if address.errors[:state].any?}" %>
+  </label>
+
+  <label class="form-control">
+    <div class="label">
+      <span class="label-text">Address Line 1</span>
+    </div>
+    <%= form.text_field :address_line_1, class: "input input-bordered #{'input-error' if address.errors[:address_line_1].any?}" %>
+  </label>
+
+  <label class="form-control">
+    <div class="label">
+      <span class="label-text">Address Line 2</span>
+    </div>
+    <%= form.text_field :address_line_2, class: "input input-bordered #{'input-error' if address.errors[:address_line_2].any?}" %>
+  </label>
+
+  <label class="form-control">
+    <div class="label">
+      <span class="label-text">Postal Code</span>
+    </div>
+    <%= form.text_field :postal_code, class: "input input-bordered #{'input-error' if address.errors[:postal_code].any?}" %>
+  </label>
+
+  <div class="form-control">
+    <label class="label cursor-pointer justify-start gap-4">
+      <span class="label-text">Make default address?</span>
+      <%= form.checkbox :default, class: 'checkbox checkbox-sm' %>
+    </label>
   </div>
 
-  <div>
-    <%= form.label :address_line_2, style: "display: block" %>
-    <%= form.text_field :address_line_2 %>
-  </div>
-
-  <div>
-    <%= form.label :city, style: "display: block" %>
-    <%= form.text_field :city %>
-  </div>
-
-  <div>
-    <%= form.label :country, style: "display: block" %>
-    <%= form.text_field :country %>
-  </div>
-
-  <div>
-    <%= form.label :state, style: "display: block" %>
-    <%= form.text_field :state %>
-  </div>
-
-  <div>
-    <%= form.label :postal_code, style: "display: block" %>
-    <%= form.text_field :postal_code %>
-  </div>
-
-  <div>
-    <%= form.label :default, style: "display: block" %>
-    <%= form.checkbox :default %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class="py-4">
+    <%= form.submit class: 'btn btn-accent btn-sm' %>
+    or 
+    <%= link_to 'go back', addresses_path, class: 'text-sm font-semibold underline' %>
   </div>
 <% end %>

@@ -4,12 +4,10 @@
 
 <% content_for :title, "New address" %>
 
-<h1>New address</h1>
+<h1 class="col-span-12 font-semibold text-lg">New address</h1>
 
-<%= render "form", address: @address %>
-
-<br>
-
-<div>
-  <%= link_to "Back to addresses", addresses_path %>
+<div class="col-span-12 md:col-span-6 md:order-2 card card-compact bg-base-200 shadow">
+  <div class="card-body">
+    <%= render "form", address: @address %>
+  </div>
 </div>
