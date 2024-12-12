@@ -10,7 +10,7 @@
     <% if content_for? :sidebar %>
       <div class="drawer lg:drawer-open">
         <input id="main-drawer" type="checkbox" class="drawer-toggle" data-application-target="mainDrawerToggle" />
-        <div class="drawer-content flex items-stretch">
+        <div class="drawer-content flex items-stretch min-h-screen">
           <label class="swap swap-rotate fixed bottom-3 left-3 z-40 lg:hidden" data-action="click->application#toggleSidebar:prevent">
             <input type="checkbox" data-application-target="togglerSwap" />
             <%= render Icons::HamburgerMenuComponent.new(classes: 'h-10 sm:h-12 sm:w-12 w-10 sm:h-12 sm:w-12 fill-current swap-off') %>
