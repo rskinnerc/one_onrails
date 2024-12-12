@@ -1,37 +1,37 @@
-<div id="<%= dom_id address %>">
-  <p>
-    <strong>Address line 1:</strong>
-    <%= address.address_line_1 %>
-  </p>
+<div class="card card-compact bg-base-200 shadow" id="<%= dom_id address %>">
+  <div class="card-body">
+    <% if address.default? %>
+      <div class="badge badge-accent badge-outline badge-sm">
+        Default
+      </div>
+    <% end %>
+    <p>
+      <%= address.address_line_1 %>
+      <% if address.address_line_2.present? %>
+      , <%= address.address_line_2%>
+      <% end %>
+    </p>
 
-  <p>
-    <strong>Address line 2:</strong>
-    <%= address.address_line_2 %>
-  </p>
+    <% if address.postal_code.present? %>
+      <p>
+        Postal Code: <%= address.postal_code %>
+      </p>
+    <% end %>
 
-  <p>
-    <strong>City:</strong>
-    <%= address.city %>
-  </p>
+    <p>
+      <%= address.city %>
+      <% if address.state.present? %>
+        , <%= address.state %>
+      <% end %>
+    </p>
 
-  <p>
-    <strong>Country:</strong>
-    <%= address.country %>
-  </p>
+    <p class="flex items-center gap-2" data-controller="country" data-country-country-code-value="<%= address.country.downcase %>">
+      <span class="loading loading-dots loading-xs" data-country-target="loadingCountries"></span>
+      <span data-country-target="countryContainer" class="hidden" ></span>
+    </p>
 
-  <p>
-    <strong>State:</strong>
-    <%= address.state %>
-  </p>
-
-  <p>
-    <strong>Postal code:</strong>
-    <%= address.postal_code %>
-  </p>
-
-  <p>
-    <strong>Default:</strong>
-    <%= address.default %>
-  </p>
-
+    <% if controller.action_name == 'index' %>
+      <%= link_to 'View details', address_path(address), class: 'text-xs self-start text-secondary' %>
+    <% end %>
+  </div>
 </div>
