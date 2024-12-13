@@ -1,9 +1,27 @@
-<h1>Update your password</h1>
+<div class="mx-auto w-full sm:w-96 mt-24 p-2 flex flex-col gap-8">
+  <%= form_with url: password_path(params[:token]), method: :put, class:'card shadow-md' do |form| %>
+    <div class="card-body">
+      <div class="card-title">
+        Update your password
+      </div>
+      <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "Enter new password", maxlength: 72, class: 'input input-bordered' %>
+      <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Repeat new password", maxlength: 72, class: 'input input-bordered' %>
+      <div class="card-actions justify-end">
+        <%= form.submit "Save", class: 'btn btn-sm btn-accent' %>
+      </div>
+    </div>
+  <% end %>
 
-<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
+  <div class="card shadow-md p-8 gap-4">
+    <p>
+      Or <%= link_to "sign In", new_session_path, class: 'text-accent font-medium underline decoration-accent decoration-1' %> instead.
+    </p>
 
-<%= form_with url: password_path(params[:token]), method: :put do |form| %>
-  <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "Enter new password", maxlength: 72 %><br>
-  <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Repeat new password", maxlength: 72 %><br>
-  <%= form.submit "Save" %>
-<% end %>
+    <% if registrations_enabled? %>
+      <p>
+        Don't have an account?
+        <%= link_to "Sign up", new_registration_path, class: 'text-accent font-medium underline decoration-accent decoration-1' %> here!
+      </p>
+    <% end %>
+  </div>
+</div>

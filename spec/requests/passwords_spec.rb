@@ -103,7 +103,7 @@ RSpec.describe "Passwords", type: :request do
 
       it "displays a flash message" do
         do_request
-        expect(flash[:alert]).to eq("Passwords did not match.")
+        expect(flash[:alert]).to eq("Something went wrong. Please try again.")
       end
     end
 

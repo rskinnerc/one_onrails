@@ -8,4 +8,4 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-Plan.create!(name: "Default", price_cents: 0, currency: "USD", trial_duration_days: 0, initial_subscription: true, description: "Default plan for all users when initial subscription is eanbled", public: false)
+Plan.create!(name: "Default", price_cents: 0, currency: "USD", trial_duration_days: 0, initial_subscription: true, description: "Default plan for all users when initial subscription is enabled", public: false)

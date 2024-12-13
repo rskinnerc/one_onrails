@@ -1,0 +1,10 @@
+<div class="flex items-center gap-1 text-xs text-gray-400">
+  Expires at: 
+  <span class="italic">
+    <% if expiry_date.present? %>
+      <%= expiry_date.strftime('%d %b %Y') %>
+    <% else %>
+      Never
+    <% end %>
+  </span>
+</div>

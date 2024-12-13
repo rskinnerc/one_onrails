@@ -9,16 +9,17 @@ RSpec.describe Profile, type: :model do
   describe "validations" do
     it { is_expected.to validate_presence_of(:first_name) }
     it { is_expected.to validate_presence_of(:last_name) }
-    it { is_expected.to validate_length_of(:country).is_equal_to(2) }
 
     context "when phone is present" do
       before { allow(subject).to receive(:phone).and_return("1234567890") }
       it { is_expected.to validate_presence_of(:country) }
+      it { is_expected.to validate_length_of(:country).is_equal_to(2) }
     end
 
     context "when phone is not present" do
       before { allow(subject).to receive(:phone).and_return(nil) }
       it { is_expected.to_not validate_presence_of(:country) }
+      it { is_expected.to_not validate_length_of(:country).is_equal_to(2) }
     end
   end
 end

@@ -107,9 +107,9 @@ RSpec.describe "Registrations", type: :request do
         expect { do_request }.not_to change { Session.count }
       end
 
-      it "returns http unprocessable entity" do
+      it "redirects back to registrations new with email as param" do
         do_request
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to redirect_to(new_registration_path(params: { email_address: params[:email_address] }))
       end
     end
   end

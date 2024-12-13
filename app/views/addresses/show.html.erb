@@ -1,11 +1,15 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :sidebar do %>
+  <% render SidebarComponent.new(controller: controller) %>
+<% end %>
 
-<%= render @address %>
+<h1 class="col-span-12 font-semibold text-lg">Address</h1>
 
-<div>
-  <%= link_to "Edit this address", edit_address_path(@address) %> |
-  <%= link_to "Back to addresses", addresses_path %>
-  <%= button_to "Make Default", make_default_address_path(@address), data: { turbo_confirm: "Are you sure?"}, method: :patch %>
-
-  <%= button_to "Destroy this address", @address, method: :delete %>
+<div class="col-span-12 md:col-span-6 gap-4 flex flex-col">
+    <%= render @address %>
+</div>
+<div class="col-span-12">
+  <%= link_to addresses_path, class: 'text-current text-sm flex items-center gap-2' do %>
+    <%= render Icons::RoundAltArrowLeftComponent.new(classes: 'h-6 w-6 fill-current') %>
+    Back to addresses
+  <% end %>
 </div>

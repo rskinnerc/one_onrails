@@ -10,7 +10,7 @@ class ProfilesController < ApplicationController
 
   def edit
     unless @profile.present?
-      redirect_to profile_path, notice: "Profile not found. Please create a new profile."
+      redirect_to profile_path, alert: "Profile not found. Please create a new profile."
     end
   end
 

@@ -1,15 +1,56 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Profile</h1>
-<% if @profile.present? %>
-  <%= render @profile %>
-
-  <div>
-    <%= link_to "Edit profile", edit_profile_path %> |
-
-    <%= button_to "Destroy this profile", @profile, method: :delete, data: { turbo_confirm: 'Are you sure?'} %>
-  </div>
-<% else %>
-  <p>You don't have a profile yet.</p>
-  <%= link_to "Create a new profile", new_profile_path %>
+<% content_for :sidebar do %>
+  <% render SidebarComponent.new(controller: controller) %>
 <% end %>
+
+<h1 class="col-span-12 font-semibold text-lg">Profile</h1>
+
+<div class="col-span-12 md:col-span-6 md:order-2 card card-compact bg-base-200 shadow">
+  <div class="card-body">
+    <% if @profile.present? %>
+      <div class="flex gap-4 items-start">
+        <div class="avatar">
+          <div class="rounded-full w-24">
+            <% if @profile.avatar&.attached? %>
+              <%= image_tag current_user.profile.avatar %>
+            <% else %>
+              <%= render Icons::UserCircleComponent.new(classes: 'fill-current') %>
+            <% end %>
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 w-full">
+          <h3 class="font-semibold text-lg mb-4">
+            <%= [@profile.first_name, @profile.last_name].join(' ') %>
+          </h3>
+          <p class="flex items-center gap-2">
+            <%= render Icons::LetterComponent.new(classes: 'h-6 h-6 fill-current') %>
+            <%= current_user.email_address %>
+          </p>
+          <% if @profile.phone.present? %>
+            <p class="flex items-center gap-2">
+              <%= render Icons::PhoneRoundedComponent.new(classes: 'h-6 h-6 fill-current') %>
+              <%= @profile.phone %>
+            </p>
+          <% end %>
+          <% if @profile.country.present? %>
+            <p class="flex items-center gap-2" data-controller="country" data-country-country-code-value="<%= @profile.country.downcase %>">
+              <%= render Icons::EarthComponent.new(classes: 'h-6 h-6 fill-current') %>
+              <span class="loading loading-dots loading-xs" data-country-target="loadingCountries"></span>
+              <span data-country-target="countryContainer" class="hidden" ></span>
+            </p>
+          <% end %>
+          <div class="flex items-center justify-end gap-2">
+            <%= link_to 'Edit profile', edit_profile_path, class: 'btn-xs btn-secondary btn-outline btn' %>
+            <%= button_to profile_path, method: :delete, data: { 'turbo-confirm': 'Are you sure?' }, class: 'cursor-pointer h-6' do %>
+              <%= render Icons::TrashBinMinimalisticComponent.new(classes: 'h-6 w-6 fill-error') %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <div class="flex flex-col items-center p-4 gap-4 justify-center">
+        <p class="text-sm">You have not yet created a profile.</p>
+        <%= link_to 'Create Profile', new_profile_path, class: 'btn btn-accent btn-sm' %>
+      </div>
+    <% end %>
+  </div>
+</div>
