@@ -4,6 +4,3 @@
   <p>Logged in as <%= Current.user.email_address %></p>
   <%= button_to 'Logout', session_path, method: :delete %>
 <% end %>
-
-<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
-<%= tag.div(flash[:notice], style: "color:green") if flash[:notice] %>
