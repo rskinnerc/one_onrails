@@ -3,6 +3,7 @@ class User < ApplicationRecord
   has_one :profile, dependent: :destroy
   has_one :subscription, dependent: :destroy
   has_one :default_address, -> { where(default: true) }, class_name: "Address"
+  has_one :setting, class_name: "User::Setting", dependent: :destroy
 
   has_many :sessions, dependent: :destroy
   has_many :addresses, dependent: :destroy
@@ -11,7 +12,7 @@ class User < ApplicationRecord
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   validates :email_address, presence: true
 
-  default_scope { includes(:subscription) }
+  default_scope { includes(:subscription, :setting) }
 
   enum :role, { regular: 0, admin: 1, super_admin: 2, banned: 3 }
 
