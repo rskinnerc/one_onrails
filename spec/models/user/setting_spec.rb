@@ -6,6 +6,6 @@ RSpec.describe User::Setting, type: :model do
   end
 
   describe "enums" do
-    it { is_expected.to define_enum_for(:theme).with_values(light: 0, dark: 1) }
+    it { is_expected.to define_enum_for(:theme).with_values(light: 0, night: 1) }
   end
 end
