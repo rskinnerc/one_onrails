@@ -1,15 +1,29 @@
 require 'rails_helper'
 
-# Specs in this file have access to a helper object that includes
-# the SettingsHelper. For example:
-#
-# describe SettingsHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 RSpec.describe SettingsHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe '#theme' do
+    context 'when user is nil' do
+      it 'returns the default theme' do
+        expect(helper.theme_for(nil)).to eq('winter')
+      end
+    end
+
+    context 'when user is present' do
+      let!(:user) { create(:user) }
+
+      context 'when user has a setting' do
+        let!(:setting) { create(:user_setting, user: user, theme: 'night') }
+
+        it 'returns the user setting theme' do
+          expect(helper.theme_for(user)).to eq('night')
+        end
+      end
+
+      context 'when user does not have a setting' do
+        it 'returns the default theme' do
+          expect(helper.theme_for(user)).to eq('winter')
+        end
+      end
+    end
+  end
 end
