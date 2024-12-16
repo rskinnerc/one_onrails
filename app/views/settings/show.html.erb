@@ -1,0 +1,24 @@
+<% content_for :sidebar do %>
+  <% render SidebarComponent.new(controller: controller) %>
+<% end %>
+
+<h1 class="col-span-12 font-semibold text-lg">Settings</h1>
+
+<div class="col-span-12 md:col-span-6 gap-4 flex flex-col">
+  <div class="card card-compact bg-base-200 shadow" id="<%= dom_id @setting %>">
+    <div class="card-body">
+      <div class="flex justify-between items-center">
+        <p class="font-semibold flex items-center gap-2">
+          <%= render Icons::PalleteComponent.new(classes: 'h-6 w-6 fill-primary') %>
+          Theme
+        </p>
+        <p class="text-right">
+          <%= @setting.theme.humanize %>
+        </p>
+      </div>
+      <div class="flex items-center justify-end gap-2 mt-2">
+        <%= link_to 'Change settings', edit_settings_path, class: 'btn btn-secondary btn-xs btn-outline' %>
+      </div>
+    </div>
+  </div>  
+</div>
