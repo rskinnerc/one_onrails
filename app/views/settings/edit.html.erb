@@ -20,3 +20,10 @@
     <% end %>
   </div>
 </div> 
+
+<div class="col-span-12">
+  <%= link_to settings_path, class: 'text-current text-sm flex items-center gap-2' do %>
+    <%= render Icons::RoundAltArrowLeftComponent.new(classes: 'h-6 w-6 fill-current') %>
+    Back to settings
+  <% end %>
+</div>
