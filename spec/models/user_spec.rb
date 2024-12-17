@@ -9,6 +9,7 @@ RSpec.describe User, type: :model do
     it { should have_one(:default_address).conditions(default: true).class_name("Address") }
     it { should have_one(:subscription).dependent(:destroy) }
     it { should have_many(:purchases).dependent(:destroy) }
+    it { should have_one(:setting).dependent(:destroy) }
   end
 
   describe "validations" do
@@ -24,6 +25,10 @@ RSpec.describe User, type: :model do
     describe "default_scope" do
       it "includes the subscription" do
         expect(User.all.includes_values).to include(:subscription)
+      end
+
+      it "includes the setting" do
+        expect(User.all.includes_values).to include(:setting)
       end
     end
   end

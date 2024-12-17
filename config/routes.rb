@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       end
     end
     resource :subscription, only: %i[show]
+    resource :settings, only: %i[show update edit]
   end
 
   resolve("Profile") { [ :profile ] }

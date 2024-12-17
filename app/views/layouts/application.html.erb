@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html data-theme="light">
+<html>
   <%= render 'layouts/head' %>
 
-  <body data-controller="application">
+  <body data-controller="application" data-theme="<%= theme_for(current_user) %>" data-application-target="body">
     <%= render 'layouts/notifications' %>
 
     <%= render 'layouts/navbar' %>

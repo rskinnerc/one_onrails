@@ -2,11 +2,12 @@
   <ul class="menu rounded-box">
     <li><a><%= render Icons::HomeComponent.new(classes: 'h-6 w-6 fill-current') %> Dashboard</a></li>
     <li>
-      <details <%= %w(account profiles addresses subscriptions).include?(controller_name) && 'open'%> >
+      <details <%= %w(account profiles settings addresses subscriptions).include?(controller_name) && 'open'%> >
         <summary><%= render Icons::SettingsComponent.new(classes: 'h-6 w-6 fill-current') %> Account</summary>
         <ul>
           <li><%= link_to 'Summary', account_path, class: active_class?('account') %></li>
           <li><%= link_to 'Profile', profile_path, class: active_class?('profiles') %></li>
+          <li><%= link_to 'Settings', settings_path, class: active_class?('settings') %>
           <li><%= link_to 'Addresses', addresses_path, class: active_class?('addresses') %></li>
           <li><%= link_to 'Billing & Subscription', subscription_path, class: active_class?('subscriptions') %></li>
         </ul>
