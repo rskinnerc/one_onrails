@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_14_174423) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_17_023309) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -84,6 +84,13 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_14_174423) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
+  end
+
+  create_table "organizations", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "plans", force: :cascade do |t|
