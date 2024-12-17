@@ -1,0 +1,22 @@
+<% content_for :sidebar do %>
+  <% render SidebarComponent.new(controller: controller) %>
+<% end %>
+
+<h1 class="col-span-12 font-semibold text-lg">Change settings</h1>
+
+<div class="col-span-12 md:col-span-6 card card-compact bg-base-200 shadow">
+  <div class="card-body">
+    <%= form_with model: @setting, scope: :setting, url: settings_path, method: :patch do |f| %>
+      <label class="form-control" >
+        <div class="label">
+          <span class="label-text">Theme</span>
+        </div>
+        <%= f.select :theme, User::Setting.themes.keys.map { |theme| [theme.humanize, theme] }, {}, class: "select select-bordered #{'select-error' if @setting.errors[:theme].any?}" %>
+      </label>
+
+      <div class="py-4">
+        <%= f.submit 'Update settings', class: 'btn btn-accent btn-sm' %>
+      </div>
+    <% end %>
+  </div>
+</div> 
