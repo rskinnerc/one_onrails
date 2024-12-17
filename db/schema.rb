@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_17_023309) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_17_023644) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -84,6 +84,17 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_17_023309) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
+  end
+
+  create_table "memberships", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "organization_id", null: false
+    t.integer "role", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_memberships_on_organization_id"
+    t.index ["user_id", "organization_id"], name: "index_memberships_on_user_id_and_organization_id", unique: true
+    t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -178,6 +189,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_17_023309) do
   add_foreign_key "addresses", "users"
   add_foreign_key "billing_histories", "subscriptions"
   add_foreign_key "billing_histories", "users"
+  add_foreign_key "memberships", "organizations"
+  add_foreign_key "memberships", "users"
   add_foreign_key "profiles", "users"
   add_foreign_key "purchases", "subscriptions"
   add_foreign_key "purchases", "users"
