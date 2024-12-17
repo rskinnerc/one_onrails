@@ -10,6 +10,8 @@ RSpec.describe User, type: :model do
     it { should have_one(:subscription).dependent(:destroy) }
     it { should have_many(:purchases).dependent(:destroy) }
     it { should have_one(:setting).dependent(:destroy) }
+    it { should have_many(:memberships).dependent(:destroy) }
+    it { should have_many(:organizations).through(:memberships) }
   end
 
   describe "validations" do

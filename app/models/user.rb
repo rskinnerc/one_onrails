@@ -9,6 +9,9 @@ class User < ApplicationRecord
   has_many :addresses, dependent: :destroy
   has_many :purchases, dependent: :destroy
 
+  has_many :memberships, dependent: :destroy
+  has_many :organizations, through: :memberships
+
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   validates :email_address, presence: true
 
