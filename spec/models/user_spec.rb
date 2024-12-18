@@ -12,6 +12,8 @@ RSpec.describe User, type: :model do
     it { should have_one(:setting).dependent(:destroy) }
     it { should have_many(:memberships).dependent(:destroy) }
     it { should have_many(:organizations).through(:memberships) }
+    it { should have_many(:sent_invites).class_name("Organization::Invite").with_foreign_key("inviter_id") }
+    it { should have_many(:received_invites).class_name("Organization::Invite").with_foreign_key("invited_user_id") }
   end
 
   describe "validations" do
