@@ -28,4 +28,20 @@ class User < ApplicationRecord
   def has_active_subscription?
     subscription&.active?
   end
+
+  def member_of?(organization)
+    organizations.include?(organization)
+  end
+
+  def role_in(organization)
+    memberships.find_by(organization: organization)&.role
+  end
+
+  def admin_of?(organization)
+    %w[admin owner].include?(role_in(organization))
+  end
+
+  def owner_of?(organization)
+    role_in(organization) == "owner"
+  end
 end

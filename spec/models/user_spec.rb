@@ -40,13 +40,11 @@ RSpec.describe User, type: :model do
   describe "methods" do
     let(:subject) { create(:user) }
     let!(:subscription) { create(:subscription, user: subject, plan: plan, status: status) }
+    let(:plan) { create(:plan) }
+    let(:status) { :active }
 
     describe "#has_active_subscription?" do
-      let(:plan) { create(:plan) }
-
       context "when the user has an active subscription" do
-        let(:status) { :active }
-
         it "returns true" do
           expect(subject.has_active_subscription?).to be true
         end
@@ -73,6 +71,89 @@ RSpec.describe User, type: :model do
 
         it "returns false" do
           expect(subject.has_active_subscription?).to be false
+        end
+      end
+    end
+
+    describe "#member_of?" do
+      let(:organization) { create(:organization) }
+
+      context "when the user is a member of the organization" do
+        before { subject.organizations << organization }
+
+        it "returns true" do
+          expect(subject.member_of?(organization)).to be true
+        end
+      end
+
+      context "when the user is not a member of the organization" do
+        it "returns false" do
+          expect(subject.member_of?(organization)).to be false
+        end
+      end
+    end
+
+    describe "#role_in" do
+      let(:organization) { create(:organization) }
+      let!(:membership) { create(:membership, user: subject, organization: organization, role: role) }
+
+      context "when the user has a role in the organization" do
+        let(:role) { "admin" }
+
+        it "returns the role" do
+          expect(subject.role_in(organization)).to eq(role)
+        end
+      end
+
+      context "when the user does not have a role in the organization" do
+        let(:role) { nil }
+
+        it "returns nil" do
+          expect(subject.role_in(organization)).to be_nil
+        end
+      end
+    end
+
+    describe "#admin_of?" do
+      let(:organization) { create(:organization) }
+
+      context "when the user is an admin of the organization" do
+        before { create(:membership, user: subject, organization: organization, role: "admin") }
+
+        it "returns true" do
+          expect(subject.admin_of?(organization)).to be true
+        end
+      end
+
+      context "when the user is an owner of the organization" do
+        before { create(:membership, user: subject, organization: organization, role: "owner") }
+
+        it "returns true" do
+          expect(subject.admin_of?(organization)).to be true
+        end
+      end
+
+      context "when the user is not an admin of the organization" do
+        it "returns false" do
+          expect(subject.admin_of?(organization)).to be false
+        end
+      end
+    end
+
+    describe "#owner_of?" do
+      let(:organization) { create(:organization) }
+
+      context "when the user is an owner of the organization" do
+        before { create(:membership, user: subject, organization: organization, role: "owner") }
+
+        it "returns true" do
+          expect(subject.owner_of?(organization)).to be true
+        end
+      end
+
+      context "when the user is not an owner of the organization" do
+        it "returns false" do
+          expect(subject.owner_of?(organization)).to be false
         end
       end
     end
