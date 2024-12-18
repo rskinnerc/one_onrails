@@ -1,11 +1,11 @@
 FactoryBot.define do
   factory :organization_invite, class: 'Organization::Invite' do
-    organization { nil }
-    inviter { nil }
-    invited_user { nil }
-    email { "MyString" }
-    status { "MyString" }
-    role { "MyString" }
-    token { "MyString" }
+    organization
+    inviter { association :user }
+    invited_user { association :user }
+    email { Faker::Internet.email }
+    status { 0 }
+    role { 0 }
+    token { "MyToken" }
   end
 end
