@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_18_014127) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_23_105507) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -131,6 +131,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_18_014127) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "initial_subscription", default: false
+    t.decimal "annual_discount_percentage", precision: 5, scale: 2
     t.index ["initial_subscription"], name: "index_plans_on_initial_subscription", unique: true
   end
 
