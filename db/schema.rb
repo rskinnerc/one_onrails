@@ -131,7 +131,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_23_105507) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "initial_subscription", default: false
-    t.decimal "annual_discount_percentage", precision: 5, scale: 2
+    t.decimal "annual_discount_percentage", precision: 5, scale: 2, default: "0.0"
+    t.integer "organizations_limit", default: 1
     t.index ["initial_subscription"], name: "index_plans_on_initial_subscription", unique: true
   end
 
