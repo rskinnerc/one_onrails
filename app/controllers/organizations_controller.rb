@@ -3,7 +3,7 @@ class OrganizationsController < ApplicationController
 
   # GET /organizations
   def index
-    @organizations = Organization.all
+    @organizations = current_user.organizations
   end
 
   # GET /organizations/1
@@ -17,21 +17,36 @@ class OrganizationsController < ApplicationController
 
   # GET /organizations/1/edit
   def edit
+    unless policy(@organization).update?
+      redirect_to organization_path(@organization), alert: "You are not authorized to perform this action."
+    end
   end
 
   # POST /organizations
   def create
     @organization = Organization.new(organization_params)
 
-    if @organization.save
-      redirect_to @organization, notice: "Organization was successfully created."
-    else
+    unless policy(@organization).create?
+      return redirect_to organizations_path, alert: "You have reached the organization limit."
+    end
+
+    begin
+      Organization.transaction do
+        @organization.save!
+        current_user.memberships.create!(organization: @organization, role: "owner")
+        redirect_to @organization, notice: "Organization was successfully created.", status: :see_other
+      end
+    rescue ActiveRecord::RecordInvalid
       render :new, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /organizations/1
   def update
+    unless policy(@organization).update?
+      return redirect_to organization_path(@organization), alert: "You are not authorized to perform this action."
+    end
+
     if @organization.update(organization_params)
       redirect_to @organization, notice: "Organization was successfully updated.", status: :see_other
     else
@@ -41,6 +56,10 @@ class OrganizationsController < ApplicationController
 
   # DELETE /organizations/1
   def destroy
+    unless policy(@organization).destroy?
+      return redirect_to organization_path(@organization), alert: "You are not authorized to perform this action."
+    end
+
     @organization.destroy!
     redirect_to organizations_path, notice: "Organization was successfully destroyed.", status: :see_other
   end
@@ -48,11 +67,11 @@ class OrganizationsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
-      @organization = Organization.find(params.expect(:id))
+      @organization = policy_scope(Organization).find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def organization_params
-      params.fetch(:organization, {})
+      params.fetch(:organization, {}).permit(:name)
     end
 end
