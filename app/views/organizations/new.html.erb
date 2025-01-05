@@ -1,8 +1,12 @@
 <% content_for :title, "New organization" %>
 
-<h1>New organization</h1>
+<% if policy(@organization).new? %>
+  <h1>New organization</h1>
 
-<%= render "form", organization: @organization %>
+  <%= render "form", organization: @organization %>
+<% else %>
+  <p>You have reached the organization limit.</p>
+<% end %>
 
 <br>
 

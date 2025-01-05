@@ -1,2 +1,12 @@
 <div id="<%= dom_id organization %>">
+  <h2><%= organization.name %></h2>
+  <p>
+    <%= link_to "Show this organization", organization %>
+  </p>
+  <p>
+    <%= link_to "Edit this organization", edit_organization_path(organization) %>
+  </p>
+  <p>
+    <%= link_to "Delete this organization", organization, method: :delete, data: { confirm: "Are you sure?" } %>
+  </p>
 </div>
