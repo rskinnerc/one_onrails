@@ -13,5 +13,13 @@
         </ul>
       </details>
     </li>
+    <li>
+      <details <%= %w(organizations).include?(controller_name) && 'open'%>>
+        <summary><%= render Icons::StructureComponent.new(classes: 'h-6 w-6 fill-current') %> Organizations</summary>
+        <ul>
+          <li><%= link_to 'Manage', organizations_path, class: active_class?('organizations') %></li>
+        </ul>
+      </details>
+    </li>
   </ul>
 </div>

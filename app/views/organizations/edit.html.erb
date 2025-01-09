@@ -1,12 +1,13 @@
+<% content_for :sidebar do %>
+  <% render SidebarComponent.new(controller: controller) %>
+<% end %>
+
 <% content_for :title, "Editing organization" %>
 
-<h1>Editing organization</h1>
+<h1 class="col-span-12 font-semibold text-lg">Editing organization</h1>
 
-<%= render "form", organization: @organization %>
-
-<br>
-
-<div>
-  <%= link_to "Show this organization", @organization %> |
-  <%= link_to "Back to organizations", organizations_path %>
+<div class="col-span-12 md:col-span-6 md:order-2 card card-compact bg-base-200 shadow">
+  <div class="card-body">
+    <%= render "form", organization: @organization %>
+  </div>
 </div>

@@ -18,8 +18,9 @@
     <%= form.text_field :name, class: "input input-bordered #{'input-error' if organization.errors[:name].any?}" %>
   </label>
 
-
-  <div>
-    <%= form.submit %>
+  <div class="py-4">
+    <%= form.submit class: 'btn btn-accent btn-sm' %>
+    or 
+    <%= link_to 'go back to organizations', organizations_path, class: 'text-sm font-semibold underline' %>
   </div>
 <% end %>
