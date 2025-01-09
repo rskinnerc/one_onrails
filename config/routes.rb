@@ -16,7 +16,9 @@ Rails.application.routes.draw do
     resource :settings, only: %i[show update edit]
   end
 
-  resources :organizations
+  resources :organizations do
+    resources :memberships, except: %i[show]
+  end
 
   resolve("Profile") { [ :profile ] }
 
