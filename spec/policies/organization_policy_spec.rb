@@ -108,4 +108,26 @@ RSpec.describe OrganizationPolicy, type: :policy do
       it { is_expected.not_to permit(user, non_member_organization) }
     end
   end
+
+  permissions :add_membership? do
+    context "when user is a member of the organization" do
+      it { is_expected.not_to permit(user, organization) }
+    end
+
+    context "when user is admin of the organization" do
+      let(:role) { "admin" }
+
+      it { is_expected.not_to permit(user, organization) }
+    end
+
+    context "when the user is owner of the organization" do
+      let(:role) { "owner" }
+
+      it { is_expected.to permit(user, organization) }
+    end
+
+    context "when user is not a member of the organization" do
+      it { is_expected.not_to permit(user, non_member_organization) }
+    end
+  end
 end

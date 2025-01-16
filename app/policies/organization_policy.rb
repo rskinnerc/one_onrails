@@ -32,4 +32,8 @@ class OrganizationPolicy < ApplicationPolicy
   def list_memberships?
     user.member_of?(record)
   end
+
+  def add_membership?
+    user.owner_of?(record)
+  end
 end
