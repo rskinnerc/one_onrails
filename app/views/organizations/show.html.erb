@@ -6,6 +6,10 @@
     <%= render @organization %>
 </div>
 
+<%= turbo_frame_tag [@organization.id, :memberships], src: organization_memberships_path(@organization), loading: 'eager' do %>
+  Loading...
+<% end %>
+
 <div class="col-span-12">
   <%= link_to organizations_path, class: 'text-current text-sm flex items-center gap-2' do %>
     <%= render Icons::RoundAltArrowLeftComponent.new(classes: 'h-6 w-6 fill-current') %>
