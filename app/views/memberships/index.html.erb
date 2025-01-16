@@ -5,5 +5,9 @@
 <%= turbo_frame_tag [@organization.id, :memberships] do %>
   <h1>Memberships</h1>
   <%= render @memberships %>
+
+  <% if policy(@organization).add_membership? %> 
+    <%= link_to "Invite member", new_organization_membership_path(@organization) %>
+  <% end %>
 <% end %>
 

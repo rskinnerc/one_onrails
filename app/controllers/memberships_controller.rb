@@ -14,6 +14,10 @@ class MembershipsController < ApplicationController
 
   # GET /memberships/new
   def new
+    unless policy(@organization).add_membership?
+      redirect_to organization_memberships_path(@organization), alert: "You are not authorized to perform this action."
+    end
+
     @membership = Membership.new
   end
 

@@ -36,8 +36,10 @@ RSpec.describe "/memberships", type: :request do
 
       context "when user is a member of the organization" do
         let(:existing_memberships) { create_list(:membership, 3, organization: organization) }
+        let(:membership) { create(:membership, user: user, organization: organization) }
+
         before do
-          create(:membership, user: user, organization: organization)
+          membership
           existing_memberships
         end
 
@@ -55,6 +57,22 @@ RSpec.describe "/memberships", type: :request do
           do_request
           existing_memberships.each do |membership|
             expect(response.body).to include(membership.user.email_address)
+          end
+        end
+
+        it "does not render the new membership button" do
+          do_request
+          expect(response.body).not_to include("Invite member")
+        end
+
+        context "when the user is owner of the organization" do
+          before do
+            membership.update(role: "owner")
+          end
+
+          it "renders the new membership button" do
+            do_request
+            expect(response.body).to include("Invite member")
           end
         end
       end
@@ -78,9 +96,74 @@ RSpec.describe "/memberships", type: :request do
   end
 
   describe "GET /new" do
-    it "renders a successful response" do
-      get new_membership_url
-      expect(response).to be_successful
+    let(:do_request) { get new_organization_membership_url(organization) }
+
+    it_behaves_like "when user is not logged in"
+
+    context "when user is logged in" do
+      include_context "when user is logged in"
+
+      context "when the user is owner of the organization" do
+        before do
+          create(:membership, user: user, organization: organization, role: "owner")
+        end
+
+        it "renders a successful response" do
+          do_request
+          expect(response).to be_successful
+        end
+
+        it "renders the new member view" do
+          do_request
+          expect(response.body).to include("Invite a new member")
+        end
+
+        it "renders a turbo frame tag with correct organization id" do
+          do_request
+          expect(response.body).to include("turbo-frame id=\"#{organization.id}_memberships\"")
+        end
+
+        it "renders the back to memberships link" do
+          do_request
+          expect(response.body).to include("Back to memberships")
+        end
+
+        context "when the organization does not exist" do
+          let(:do_request) { get new_organization_membership_url(0) }
+
+          it "returns a not found response" do
+            do_request
+            expect(response).to have_http_status(:not_found)
+          end
+        end
+      end
+
+      context "when the user is not owner of the organization" do
+        %w[member admin].each do |role|
+          context "when the user is a #{role}" do
+            before do
+              create(:membership, user: user, organization: organization, role: role)
+            end
+
+            it "redirects to the memberships index page" do
+              do_request
+              expect(response).to redirect_to(organization_memberships_url(organization))
+            end
+
+            it "displays an alert message" do
+              do_request
+              expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+            end
+          end
+        end
+      end
+
+      context "when the user is not a member of the organization" do
+        it "returns a not found response" do
+          do_request
+          expect(response).to have_http_status(:not_found)
+        end
+      end
     end
   end
 
