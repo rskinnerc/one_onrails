@@ -1,9 +1,15 @@
 class MembershipsController < ApplicationController
-  before_action :set_membership, only: %i[ show edit update destroy ]
+  before_action :set_organization
+  before_action :set_membership, only: %i[ edit update destroy ]
 
   # GET /memberships
   def index
-    @memberships = Membership.all
+    unless policy(@organization).list_memberships?
+      redirect_to organizations_path, alert: "You are not authorized to perform this action."
+      return
+    end
+
+    @memberships = policy_scope(@organization, policy_scope_class: MembershipPolicy::Scope)
   end
 
   # GET /memberships/new
@@ -44,7 +50,11 @@ class MembershipsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_membership
-      @membership = Membership.find(params.expect(:id))
+      @membership = policy_scope(@organization, policy_scope_class: MembershipPolicy::Scope).find(params[:id])
+    end
+
+    def set_organization
+      @organization = policy_scope(Organization).find(params[:organization_id])
     end
 
     # Only allow a list of trusted parameters through.

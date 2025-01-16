@@ -1,0 +1,9 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Memberships" %>
+
+<%= turbo_frame_tag [@organization.id, :memberships] do %>
+  <h1>Memberships</h1>
+  <%= render @memberships %>
+<% end %>
+
