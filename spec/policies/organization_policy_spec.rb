@@ -98,4 +98,14 @@ RSpec.describe OrganizationPolicy, type: :policy do
       it { is_expected.to permit(user, organization) }
     end
   end
+
+  permissions :list_memberships? do
+    context "when user is a member of the organization" do
+      it { is_expected.to permit(user, organization) }
+    end
+
+    context "when user is not a member of the organization" do
+      it { is_expected.not_to permit(user, non_member_organization) }
+    end
+  end
 end

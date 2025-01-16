@@ -28,4 +28,8 @@ class OrganizationPolicy < ApplicationPolicy
   def destroy?
     update?
   end
+
+  def list_memberships?
+    user.member_of?(record)
+  end
 end
