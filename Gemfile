@@ -73,6 +73,8 @@ group :development, :test do
   gem "pry", "~> 0.14.2"
 
   gem "dotenv"
+
+  gem "rubocop-rspec"
 end
 
 group :development do

@@ -320,6 +320,8 @@ GEM
       rubocop-minitest
       rubocop-performance
       rubocop-rails
+    rubocop-rspec (3.3.0)
+      rubocop (~> 1.61)
     ruby-progressbar (1.13.0)
     sanitize (6.1.3)
       crass (~> 1.0.2)
@@ -429,6 +431,7 @@ DEPENDENCIES
   rails (~> 8.0.1)
   rspec-rails
   rubocop-rails-omakase
+  rubocop-rspec
   shoulda-matchers (~> 6.0)
   solid_cable
   solid_cache
