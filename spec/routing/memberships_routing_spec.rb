@@ -6,17 +6,8 @@ RSpec.describe MembershipsController, type: :routing do
       expect(get: "/organizations/2/memberships").to route_to("memberships#index", organization_id: "2")
     end
 
-    it "routes to #new" do
-      expect(get: "/organizations/2/memberships/new").to route_to("memberships#new", organization_id: "2")
-    end
-
     it "routes to #edit" do
       expect(get: "/organizations/2/memberships/1/edit").to route_to("memberships#edit", id: "1", organization_id: "2")
-    end
-
-
-    it "routes to #create" do
-      expect(post: "/organizations/2/memberships").to route_to("memberships#create", organization_id: "2")
     end
 
     it "routes to #update via PUT" do

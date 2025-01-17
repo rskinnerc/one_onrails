@@ -1,4 +1,7 @@
 <div id="<%= dom_id membership %>">
   <%= membership.user.email_address %>
-  <%= link_to "Edit", edit_organization_membership_path(membership.organization, membership) %>
+
+  <% if policy(membership.organization).add_membership? %>
+    <%= link_to "Edit", edit_organization_membership_path(membership.organization, membership) %>
+  <% end %>
 </div>

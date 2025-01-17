@@ -12,30 +12,10 @@ class MembershipsController < ApplicationController
     @memberships = policy_scope(@organization, policy_scope_class: MembershipPolicy::Scope)
   end
 
-  # GET /memberships/new
-  def new
-    unless policy(@organization).add_membership?
-      redirect_to organization_memberships_path(@organization), alert: "You are not authorized to perform this action."
-    end
-
-    @membership = Membership.new
-  end
-
   # GET /memberships/1/edit
   def edit
     unless policy(@organization).add_membership?
       redirect_to organization_memberships_path(@organization), alert: "You are not authorized to perform this action."
-    end
-  end
-
-  # POST /memberships
-  def create
-    @membership = Membership.new(membership_params)
-
-    if @membership.save
-      redirect_to @membership, notice: "Membership was successfully created."
-    else
-      render :new, status: :unprocessable_entity
     end
   end
 

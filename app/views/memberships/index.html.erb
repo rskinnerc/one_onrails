@@ -7,7 +7,7 @@
   <%= render @memberships %>
 
   <% if policy(@organization).add_membership? %> 
-    <%= link_to "Invite member", new_organization_membership_path(@organization) %>
+    <%= link_to "Invite member", "#" %>
   <% end %>
 <% end %>
 

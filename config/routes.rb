@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   end
 
   resources :organizations do
-    resources :memberships, except: %i[show]
+    resources :memberships, except: %i[show new create]
   end
 
   resolve("Profile") { [ :profile ] }
