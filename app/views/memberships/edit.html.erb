@@ -1,0 +1,10 @@
+<% content_for :title, "Editing membership" %>
+
+<%= turbo_frame_tag [@organization.id, :memberships] do %>
+
+  <h1>Edit member</h1>
+
+  <%= render "form", membership: @membership %>
+
+  <%= link_to "Back to memberships", organization_memberships_path(@organization) %>
+<% end %>

@@ -23,6 +23,9 @@ class MembershipsController < ApplicationController
 
   # GET /memberships/1/edit
   def edit
+    unless policy(@organization).add_membership?
+      redirect_to organization_memberships_path(@organization), alert: "You are not authorized to perform this action."
+    end
   end
 
   # POST /memberships

@@ -60,6 +60,13 @@ RSpec.describe "/memberships", type: :request do
           end
         end
 
+        it "renders the edit button for the user's membership" do
+          do_request
+          existing_memberships.each do |membership|
+            expect(response.body).to include(edit_organization_membership_path(organization, membership))
+          end
+        end
+
         it "does not render the new membership button" do
           do_request
           expect(response.body).not_to include("Invite member")
@@ -168,10 +175,84 @@ RSpec.describe "/memberships", type: :request do
   end
 
   describe "GET /edit" do
-    it "renders a successful response" do
-      membership = Membership.create! valid_attributes
-      get edit_membership_url(membership)
-      expect(response).to be_successful
+    let(:do_request) { get edit_organization_membership_path(organization, membership) }
+    let(:membership) { create(:membership, organization: organization) }
+
+    it_behaves_like "when user is not logged in"
+
+    context "when user is logged in" do
+      include_context "when user is logged in"
+
+      context "when the user is owner of the organization" do
+        before do
+          create(:membership, user: user, organization: organization, role: "owner")
+        end
+
+        it "renders a successful response" do
+          do_request
+          expect(response).to be_successful
+        end
+
+        it "renders the edit member view" do
+          do_request
+          expect(response.body).to include("Edit member")
+        end
+
+        it "renders a turbo frame tag with correct organization id" do
+          do_request
+          expect(response.body).to include("turbo-frame id=\"#{organization.id}_memberships\"")
+        end
+
+        it "renders the back to memberships link" do
+          do_request
+          expect(response.body).to include("Back to memberships")
+        end
+
+        context "when the organization does not exist" do
+          let(:do_request) { get edit_organization_membership_path(0, membership) }
+
+          it "returns a not found response" do
+            do_request
+            expect(response).to have_http_status(:not_found)
+          end
+        end
+
+        context "when the membership does not exist" do
+          let(:do_request) { get edit_organization_membership_path(organization, 0) }
+
+          it "returns a not found response" do
+            do_request
+            expect(response).to have_http_status(:not_found)
+          end
+        end
+      end
+
+      context "when the user is not owner of the organization" do
+        %w[member admin].each do |role|
+          context "when the user is a #{role}" do
+            before do
+              create(:membership, user: user, organization: organization, role: role)
+            end
+
+            it "redirects to the memberships index page" do
+              do_request
+              expect(response).to redirect_to(organization_memberships_url(organization))
+            end
+
+            it "displays an alert message" do
+              do_request
+              expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+            end
+          end
+        end
+      end
+
+      context "when the user is not a member of the organization" do
+        it "returns a not found response" do
+          do_request
+          expect(response).to have_http_status(:not_found)
+        end
+      end
     end
   end
 
