@@ -2,6 +2,6 @@
   <%= membership.user.email_address %>
 
   <% if policy(membership.organization).add_membership? %>
-    <%= link_to "Edit", edit_organization_membership_path(membership.organization, membership) %>
+    <%= link_to "Change role", edit_organization_membership_path(membership.organization, membership) %>
   <% end %>
 </div>

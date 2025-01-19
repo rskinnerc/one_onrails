@@ -128,7 +128,7 @@ RSpec.describe "/memberships", type: :request do
 
         it "renders the edit member view" do
           do_request
-          expect(response.body).to include("Edit member")
+          expect(response.body).to include("Change member role")
         end
 
         it "renders a turbo frame tag with correct organization id" do
@@ -230,7 +230,7 @@ RSpec.describe "/memberships", type: :request do
 
           it "renders the edit member view" do
             do_request
-            expect(response.body).to include("Edit member")
+            expect(response.body).to include("Change member role")
           end
 
           it "renders a turbo frame tag with correct organization id" do
