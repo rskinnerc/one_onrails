@@ -19,6 +19,6 @@ class MembershipPolicy < ApplicationPolicy
   end
 
   def destroy?
-    create?
+    create? && user != record.user
   end
 end

@@ -277,17 +277,63 @@ RSpec.describe "/memberships", type: :request do
   end
 
   describe "DELETE /destroy" do
-    it "destroys the requested membership" do
-      membership = Membership.create! valid_attributes
-      expect {
-        delete membership_url(membership)
-      }.to change(Membership, :count).by(-1)
-    end
+    let(:do_request) { delete organization_membership_path(organization, membership) }
+    let(:membership) { create(:membership, organization: organization) }
 
-    it "redirects to the memberships list" do
-      membership = Membership.create! valid_attributes
-      delete membership_url(membership)
-      expect(response).to redirect_to(memberships_url)
+    it_behaves_like "when user is not logged in"
+
+    context "when user is logged in" do
+      include_context "when user is logged in"
+
+      context "when the user is owner of the organization" do
+        before do
+          create(:membership, user: user, organization: organization, role: "owner")
+        end
+
+        it "destroys the requested membership" do
+          do_request
+          expect { membership.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+
+        it "redirects to the memberships list" do
+          do_request
+          expect(response).to redirect_to(organization_memberships_url(organization))
+        end
+
+        context "when the organization does not exist" do
+          let(:do_request) { delete organization_membership_path(0, membership) }
+
+          it "returns a not found response" do
+            do_request
+            expect(response).to have_http_status(:not_found)
+          end
+        end
+
+        context "when the membership does not exist" do
+          let(:do_request) { delete organization_membership_path(organization, 0) }
+
+          it "returns a not found response" do
+            do_request
+            expect(response).to have_http_status(:not_found)
+          end
+        end
+      end
+
+      context "when the user is not owner of the organization" do
+        before do
+          create(:membership, user: user, organization: organization, role: "admin")
+        end
+
+        it "redirects to the memberships index page" do
+          do_request
+          expect(response).to redirect_to(organization_memberships_url(organization))
+        end
+
+        it "displays an alert message" do
+          do_request
+          expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+        end
+      end
     end
   end
 end

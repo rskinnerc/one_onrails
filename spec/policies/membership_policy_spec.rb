@@ -100,7 +100,11 @@ RSpec.describe MembershipPolicy, type: :policy do
     context "when user is an owner of the organization" do
       let(:role) { 2 }
 
-      it { is_expected.to permit(user, membership) }
+      it { is_expected.to permit(user, other_membership) }
+
+      context "when the user tries to delete their own membership" do
+        it { is_expected.not_to permit(user, membership) }
+      end
     end
   end
 end

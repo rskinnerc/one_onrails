@@ -35,8 +35,13 @@ class MembershipsController < ApplicationController
 
   # DELETE /memberships/1
   def destroy
+    unless policy(@membership).destroy?
+      redirect_to organization_memberships_path(@organization), alert: "You are not authorized to perform this action."
+      return
+    end
+
     @membership.destroy!
-    redirect_to memberships_path, notice: "Membership was successfully destroyed.", status: :see_other
+    redirect_to organization_memberships_path(@organization), notice: "Membership was successfully destroyed.", status: :see_other
   end
 
   private
