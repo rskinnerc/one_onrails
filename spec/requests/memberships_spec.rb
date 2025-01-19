@@ -190,31 +190,88 @@ RSpec.describe "/memberships", type: :request do
   end
 
   describe "PATCH /update" do
-    context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+    let(:do_request) { patch organization_membership_path(organization, membership), params: params }
+    let(:membership) { create(:membership, organization: organization, role: role) }
+    let(:params) { {} }
+    let(:role) { "member" }
 
-      it "updates the requested membership" do
-        membership = Membership.create! valid_attributes
-        patch membership_url(membership), params: { membership: new_attributes }
-        membership.reload
-        skip("Add assertions for updated state")
+    it_behaves_like "when user is not logged in"
+
+    context "when user is logged in" do
+      include_context "when user is logged in"
+
+      context "when the user is owner of the organization" do
+        before do
+          create(:membership, user: user, organization: organization, role: "owner")
+        end
+
+        context "with valid parameters" do
+          let(:params) { { membership: { role: "admin" } } }
+
+          it "updates the requested membership" do
+            do_request
+            membership.reload
+            expect(membership.role).to eq("admin")
+          end
+
+          it "redirects to the memberships list" do
+            do_request
+            expect(response).to redirect_to(organization_memberships_url(organization))
+          end
+        end
+
+        context "with invalid parameters" do
+          let(:params) { { membership: { role: nil } } }
+
+          it 'returns an unprocessable entity response' do
+            do_request
+            expect(response).to have_http_status(:unprocessable_entity)
+          end
+
+          it "renders the edit member view" do
+            do_request
+            expect(response.body).to include("Edit member")
+          end
+
+          it "renders a turbo frame tag with correct organization id" do
+            do_request
+            expect(response.body).to include("turbo-frame id=\"#{organization.id}_memberships\"")
+          end
+        end
+
+        context "when the organization does not exist" do
+          let(:do_request) { patch organization_membership_path(0, membership), params: params }
+
+          it "returns a not found response" do
+            do_request
+            expect(response).to have_http_status(:not_found)
+          end
+        end
+
+        context "when the membership does not exist" do
+          let(:do_request) { patch organization_membership_path(organization, 0), params: params }
+
+          it "returns a not found response" do
+            do_request
+            expect(response).to have_http_status(:not_found)
+          end
+        end
       end
 
-      it "redirects to the membership" do
-        membership = Membership.create! valid_attributes
-        patch membership_url(membership), params: { membership: new_attributes }
-        membership.reload
-        expect(response).to redirect_to(membership_url(membership))
-      end
-    end
+      context "when the user is not owner of the organization" do
+        before do
+          create(:membership, user: user, organization: organization, role: "admin")
+        end
 
-    context "with invalid parameters" do
-      it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        membership = Membership.create! valid_attributes
-        patch membership_url(membership), params: { membership: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        it "redirects to the memberships index page" do
+          do_request
+          expect(response).to redirect_to(organization_memberships_url(organization))
+        end
+
+        it "displays an alert message" do
+          do_request
+          expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+        end
       end
     end
   end

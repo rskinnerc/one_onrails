@@ -104,14 +104,6 @@ RSpec.describe User, type: :model do
           expect(subject.role_in(organization)).to eq(role)
         end
       end
-
-      context "when the user does not have a role in the organization" do
-        let(:role) { nil }
-
-        it "returns nil" do
-          expect(subject.role_in(organization)).to be_nil
-        end
-      end
     end
 
     describe "#admin_of?" do

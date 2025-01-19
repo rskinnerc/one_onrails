@@ -21,8 +21,13 @@ class MembershipsController < ApplicationController
 
   # PATCH/PUT /memberships/1
   def update
+    unless policy(@organization).add_membership?
+      redirect_to organization_memberships_path(@organization), alert: "You are not authorized to perform this action."
+      return
+    end
+
     if @membership.update(membership_params)
-      redirect_to @membership, notice: "Membership was successfully updated.", status: :see_other
+      redirect_to organization_memberships_path(@organization), notice: "Membership was successfully updated.", status: :see_other
     else
       render :edit, status: :unprocessable_entity
     end
@@ -46,6 +51,6 @@ class MembershipsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def membership_params
-      params.fetch(:membership, {})
+      params.fetch(:membership, {}).permit(:role)
     end
 end
