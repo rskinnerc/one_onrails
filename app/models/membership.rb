@@ -11,6 +11,7 @@ class Membership < ApplicationRecord
   # Validations
   validates :user_id, uniqueness: { scope: :organization_id }
   validate :single_owner_per_organization
+  validates :role, presence: true
 
   private
 

@@ -15,6 +15,7 @@ RSpec.describe Membership, type: :model do
     let(:organization) { create(:organization) }
     let!(:existing_membership) { create(:membership, user: user, organization: organization) }
 
+    it { should validate_presence_of(:role) }
     it { should validate_uniqueness_of(:user_id).scoped_to(:organization_id).with_message('has already been taken') }
 
     describe "single_owner_per_organization" do
