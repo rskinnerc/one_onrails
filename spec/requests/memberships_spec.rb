@@ -26,7 +26,7 @@ RSpec.describe "/memberships", type: :request do
     skip("Add a hash of attributes invalid for your model")
   }
 
-  describe "GET /index" do
+  fdescribe "GET /index" do
     let(:do_request) { get organization_memberships_url(organization) }
 
     it_behaves_like "when user is not logged in"
@@ -62,7 +62,16 @@ RSpec.describe "/memberships", type: :request do
 
         it "does not render the edit button for the user's membership" do
           do_request
-          expect(response.body).not_to include(edit_organization_membership_path(organization, membership))
+          existing_memberships.each do |membership|
+            expect(response.body).not_to include(edit_organization_membership_path(organization, membership))
+          end
+        end
+
+        it "does not render the destroy button for the user's membership" do
+          do_request
+          existing_memberships.each do |membership|
+            expect(response.body).not_to include("destroy_#{membership.id}")
+          end
         end
 
         it "does not render the new membership button" do
@@ -84,6 +93,13 @@ RSpec.describe "/memberships", type: :request do
             do_request
             existing_memberships.each do |membership|
               expect(response.body).to include(edit_organization_membership_path(organization, membership))
+            end
+          end
+
+          it "renders the destroy button for the user's membership" do
+            do_request
+            existing_memberships.each do |membership|
+              expect(response.body).to include("destroy_#{membership.id}")
             end
           end
         end

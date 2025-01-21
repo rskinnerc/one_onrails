@@ -4,4 +4,8 @@
   <% if policy(membership.organization).add_membership? %>
     <%= link_to "Change role", edit_organization_membership_path(membership.organization, membership) %>
   <% end %>
+
+  <% if policy(membership).destroy? %>
+    <%= button_to "Remove", organization_membership_path(membership.organization, membership), method: :delete, id: "destroy_#{membership.id}", data: { turbo_confirm: "Are you sure?" } %>
+  <% end %>
 </div>
