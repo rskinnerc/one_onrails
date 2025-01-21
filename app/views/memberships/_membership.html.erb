@@ -1,15 +1,20 @@
-<div class="flex flex-col gap-2 items-start" id="<%= dom_id membership %>">
-  <%= membership.user.email_address %>
+<div class="card card-compact bg-base-200 shadow">
+  <div class="card-body">
+    <div class="flex justify-between items-baseline">
+      <%= membership.user.email_address %>
+      <%= render Memberships::RoleComponent.new(role: membership.role) %>
+    </div>
 
-  <div class="flex gap-2 items-bottom">
-    <% if policy(membership).update? %>
-      <%= link_to 'Change role', edit_organization_membership_path(membership.organization, membership), class: 'btn btn-secondary btn-xs btn-outline' %>
-    <% end %>
-
-    <% if policy(membership).destroy? %>
-      <%= button_to organization_membership_path(membership.organization, membership), method: :delete, id: "destroy_#{membership.id}", data: { turbo_confirm: "Are you sure?" }, class: "cursor-pointer h-6" do %>
-        <%= render Icons::TrashBinMinimalisticComponent.new(classes: 'h-6 w-6 fill-error') %>
+    <div class="flex gap-2 items-bottom">
+      <% if policy(membership).update? %>
+        <%= link_to 'Change role', edit_organization_membership_path(membership.organization, membership), class: 'btn btn-secondary btn-xs btn-outline' %>
       <% end %>
-    <% end %>
+
+      <% if policy(membership).destroy? %>
+        <%= button_to organization_membership_path(membership.organization, membership), method: :delete, id: "destroy_#{membership.id}", data: { turbo_confirm: "Are you sure?" }, class: "cursor-pointer h-6" do %>
+          <%= render Icons::TrashBinMinimalisticComponent.new(classes: 'h-6 w-6 fill-error') %>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 </div>
