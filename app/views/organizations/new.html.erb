@@ -1,0 +1,20 @@
+<% content_for :sidebar do %>
+  <% render SidebarComponent.new(controller: controller) %>
+<% end %>
+
+<% content_for :title, "New organization" %>
+
+<h1 class="col-span-12 font-semibold text-lg">New organization</h1>
+
+<div class="col-span-12 md:col-span-6 md:order-2 card card-compact bg-base-200 shadow">
+  <div class="card-body">
+    <% if policy(@organization).new? %>
+      <%= render "form", organization: @organization %>
+    <% else %>
+      <div class="flex flex-col items-center p-4 gap-4 justify-center">
+        <p class="text-center">You have reached the organization limit.</p>
+          <%= link_to 'Upgrade your plan', '#', class: 'btn btn-accent btn-sm' %>
+      </div>
+    <% end %>
+  </div>
+</div>

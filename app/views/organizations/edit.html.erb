@@ -2,12 +2,12 @@
   <% render SidebarComponent.new(controller: controller) %>
 <% end %>
 
-<% content_for :title, "Editing address" %>
+<% content_for :title, "Editing organization" %>
 
-<h1 class="col-span-12 font-semibold text-lg">Editing address</h1>
+<h1 class="col-span-12 font-semibold text-lg">Editing organization</h1>
 
 <div class="col-span-12 md:col-span-6 md:order-2 card card-compact bg-base-200 shadow">
   <div class="card-body">
-    <%= render "form", address: @address %>
+    <%= render "form", organization: @organization %>
   </div>
 </div>

@@ -1,0 +1,8 @@
+<% content_for :title, "New membership" %>
+
+<%= turbo_frame_tag [@organization.id, :memberships] do %>
+  <h1>Invite a new member</h1>
+  <%= render 'form', membership: @membership %>
+
+  <%= link_to 'Back to memberships', organization_memberships_path(@organization) %>
+<% end %>

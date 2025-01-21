@@ -16,6 +16,10 @@ Rails.application.routes.draw do
     resource :settings, only: %i[show update edit]
   end
 
+  resources :organizations do
+    resources :memberships, except: %i[show new create]
+  end
+
   resolve("Profile") { [ :profile ] }
 
   flipper_app = Flipper::UI.app do |builder|

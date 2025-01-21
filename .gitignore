@@ -43,3 +43,5 @@
 .flaskenv*
 !.env.project
 !.env.vault
+
+/spec/examples.txt

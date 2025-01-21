@@ -1,0 +1,18 @@
+<div class="card card-compact bg-base-200 shadow" id="<%= dom_id organization %>">
+  <div class="card-body">
+    <p class="font-semibold">
+      <%= organization.name %>
+    </p>
+    <small class="text-xs">Created at <%= organization.created_at.to_fs(:long) %></small>
+    <div class="flex items-center justify-end gap-2">
+      <% if controller.action_name == 'index' %>
+        <%= link_to 'View details', organization_path(organization), class: 'btn btn-secondary btn-xs btn-outline' %>
+      <% elsif controller.action_name == 'show' %>
+        <%= link_to 'Edit organization', edit_organization_path(organization), class: 'btn btn-secondary btn-xs btn-outline' %>
+        <%= button_to organization, method: :delete, data: { 'turbo-confirm': 'Are you sure?' }, class: 'cursor-pointer h-6' do %>
+          <%= render Icons::TrashBinMinimalisticComponent.new(classes: 'h-6 w-6 fill-error') %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

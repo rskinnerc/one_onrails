@@ -1,0 +1,26 @@
+<%= form_with(model: organization, id: 'new_organization_form') do |form| %>
+  <% if organization.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(organization.errors.count, "error") %> prohibited this organization from being saved:</h2>
+
+      <ul>
+        <% organization.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <label class="form-control">
+    <div class="label">
+      <span class="label-text">Organization Name</span>
+    </div>
+    <%= form.text_field :name, class: "input input-bordered #{'input-error' if organization.errors[:name].any?}" %>
+  </label>
+
+  <div class="py-4">
+    <%= form.submit class: 'btn btn-accent btn-sm' %>
+    or 
+    <%= link_to 'go back to organizations', organizations_path, class: 'text-sm font-semibold underline' %>
+  </div>
+<% end %>

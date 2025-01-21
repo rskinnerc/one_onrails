@@ -9,6 +9,15 @@ class User < ApplicationRecord
   has_many :addresses, dependent: :destroy
   has_many :purchases, dependent: :destroy
 
+  has_many :memberships, dependent: :destroy
+  has_many :organizations, through: :memberships
+  has_many :sent_invites,
+    class_name: "Organization::Invite",
+    foreign_key: "inviter_id"
+  has_many :received_invites,
+    class_name: "Organization::Invite",
+    foreign_key: "invited_user_id"
+
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   validates :email_address, presence: true
 
@@ -18,5 +27,21 @@ class User < ApplicationRecord
 
   def has_active_subscription?
     subscription&.active?
+  end
+
+  def member_of?(organization)
+    organizations.include?(organization)
+  end
+
+  def role_in(organization)
+    memberships.find_by(organization: organization)&.role
+  end
+
+  def admin_of?(organization)
+    %w[admin owner].include?(role_in(organization))
+  end
+
+  def owner_of?(organization)
+    role_in(organization) == "owner"
   end
 end
