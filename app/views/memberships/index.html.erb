@@ -1,13 +1,21 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :sidebar do %>
+  <% render SidebarComponent.new(controller: controller) %>
+<% end %>
 
 <% content_for :title, "Memberships" %>
 
-<%= turbo_frame_tag [@organization.id, :memberships] do %>
-  <h1>Memberships</h1>
-  <%= render @memberships %>
+<div class="col-span-12 md:col-span-6 md:order-2 gap-4 flex flex-col">  
+  <%= turbo_frame_tag [@organization.id, :memberships] do %>
+    <div class="card card-compact bg-base-200 shadow w-full">
+      <div class="card-body">
+        <h3 class="font-semibold">Organization's Memberships</h3>
+        <%= render @memberships %>
 
-  <% if policy(@organization).add_membership? %> 
-    <%= link_to "Invite member", "#" %>
+        <% if policy(@organization).add_membership? %> 
+          <%= link_to "Invite member", "#", class: "btn btn-accent btn-xs self-end" %>
+        <% end %>
+      </div>
+    </div>
   <% end %>
-<% end %>
+</div>
 

@@ -26,7 +26,7 @@ RSpec.describe "/memberships", type: :request do
     skip("Add a hash of attributes invalid for your model")
   }
 
-  fdescribe "GET /index" do
+  describe "GET /index" do
     let(:do_request) { get organization_memberships_url(organization) }
 
     it_behaves_like "when user is not logged in"
