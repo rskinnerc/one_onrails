@@ -1,10 +1,19 @@
-<% content_for :title, "Editing membership" %>
-
-<%= turbo_frame_tag [@organization.id, :memberships] do %>
-
-  <h1>Change member role</h1>
-
-  <%= render "form", membership: @membership %>
-
-  <%= link_to "Back to memberships", organization_memberships_path(@organization) %>
+<% content_for :sidebar do %>
+  <% render SidebarComponent.new(controller: controller) %>
 <% end %>
+
+<% content_for :title, "Change membership's role" %>
+
+<div class="col-span-12 md:col-span-6 md:order-2 gap-4 flex flex-col">  
+  <%= turbo_frame_tag [@organization.id, :memberships] do %>
+    <div class="card card-compact bg-base-200 shadow w-full">
+      <div class="card-body">
+        <span>Change role for <%= @membership.user.email_address %></span>
+
+        <%= render "form", membership: @membership %>
+
+        <%= link_to "Cancel", organization_memberships_path(@organization), class: "btn btn-outline btn-xs self-end" %>
+      </div>
+    </div>
+  <% end %>
+</div>

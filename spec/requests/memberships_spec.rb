@@ -144,7 +144,7 @@ RSpec.describe "/memberships", type: :request do
 
         it "renders the edit member view" do
           do_request
-          expect(response.body).to include("Change member role")
+          expect(response.body).to include("Change role for #{membership.user.email_address}")
         end
 
         it "renders a turbo frame tag with correct organization id" do
@@ -152,9 +152,9 @@ RSpec.describe "/memberships", type: :request do
           expect(response.body).to include("turbo-frame id=\"#{organization.id}_memberships\"")
         end
 
-        it "renders the back to memberships link" do
+        it "renders the Cancel link" do
           do_request
-          expect(response.body).to include("Back to memberships")
+          expect(response.body).to include("Cancel")
         end
 
         context "when the organization does not exist" do
@@ -246,7 +246,7 @@ RSpec.describe "/memberships", type: :request do
 
           it "renders the edit member view" do
             do_request
-            expect(response.body).to include("Change member role")
+            expect(response.body).to include("Change role for #{membership.user.email_address}")
           end
 
           it "renders a turbo frame tag with correct organization id" do
