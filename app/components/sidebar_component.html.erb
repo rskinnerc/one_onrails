@@ -14,10 +14,10 @@
       </details>
     </li>
     <li>
-      <details <%= %w(organizations).include?(controller_name) && 'open'%>>
+      <details <%= %w(organizations memberships).include?(controller_name) && 'open'%>>
         <summary><%= render Icons::StructureComponent.new(classes: 'h-6 w-6 fill-current') %> Organizations</summary>
         <ul>
-          <li><%= link_to 'Manage', organizations_path, class: active_class?('organizations') %></li>
+          <li><%= link_to 'Manage', organizations_path, class: active_class?(['organizations', 'memberships']) %></li>
         </ul>
       </details>
     </li>
