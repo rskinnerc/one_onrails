@@ -9,7 +9,7 @@ class MembershipsController < ApplicationController
       return
     end
 
-    @memberships = policy_scope(@organization, policy_scope_class: MembershipPolicy::Scope)
+    @memberships = @organization.memberships
   end
 
   # GET /memberships/1/edit
@@ -51,11 +51,11 @@ class MembershipsController < ApplicationController
     end
 
     def set_organization
-      @organization = policy_scope(Organization).find(params[:organization_id])
+      @organization = current_user.organizations.find(params[:organization_id])
     end
 
     # Only allow a list of trusted parameters through.
     def membership_params
-      params.fetch(:membership, {}).permit(:role)
+      params.expect(membership: [ :role ])
     end
 end

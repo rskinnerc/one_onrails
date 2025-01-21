@@ -67,7 +67,7 @@ class OrganizationsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
-      @organization = policy_scope(Organization).find(params[:id])
+      @organization = current_user.organizations.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
