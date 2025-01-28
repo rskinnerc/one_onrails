@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  namespace :organization do
-    resources :invites
-  end
   get "home/index"
   resource :session
   resources :passwords, param: :token
@@ -21,6 +18,7 @@ Rails.application.routes.draw do
 
   resources :organizations do
     resources :memberships, except: %i[show new create]
+    resources :invites, controller: "organization/invites"
   end
 
   resolve("Profile") { [ :profile ] }
