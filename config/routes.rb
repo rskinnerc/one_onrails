@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  namespace :organization do
+    resources :invites
+  end
   get "home/index"
   resource :session
   resources :passwords, param: :token
