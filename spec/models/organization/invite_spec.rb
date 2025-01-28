@@ -7,6 +7,10 @@ RSpec.describe Organization::Invite, type: :model do
     it { should belong_to(:invited_user).class_name("User").optional }
   end
 
+  describe "has_secure_token" do
+    it { should have_secure_token(:token) }
+  end
+
   describe "validations" do
     it { should validate_presence_of(:email) }
     it { should allow_value("some@email.com").for(:email) }

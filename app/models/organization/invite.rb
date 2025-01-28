@@ -1,4 +1,6 @@
 class Organization::Invite < ApplicationRecord
+  has_secure_token :token
+
   belongs_to :organization
   belongs_to :inviter, class_name: "User"
   belongs_to :invited_user, class_name: "User", optional: true
