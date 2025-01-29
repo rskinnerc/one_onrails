@@ -25,6 +25,9 @@ class Organization::InvitesController < ApplicationController
 
   # GET /organization/invites/1/edit
   def edit
+    unless policy(@organization).add_membership?
+      redirect_to organization_invites_path(@organization), alert: "You are not authorized to access this page."
+    end
   end
 
   # POST /organization/invites

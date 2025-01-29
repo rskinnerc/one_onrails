@@ -155,15 +155,25 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
       include_context "when user is logged in"
 
       context "when the user has access to the invite" do
+        let(:policy) { instance_double("OrganizationPolicy", add_membership?: true) }
+
         it "renders a successful response" do
+          do_request
+          expect(response).to be_successful
         end
       end
 
       context "when the user does not have access to the invite" do
+        let(:policy) { instance_double("OrganizationPolicy", add_membership?: false) }
+
         it "redirects to the organization invites page" do
+          do_request
+          expect(response).to redirect_to(organization_invites_url(organization))
         end
 
         it "displays a flash message" do
+          do_request
+          expect(flash[:alert]).to eq("You are not authorized to access this page.")
         end
       end
     end
