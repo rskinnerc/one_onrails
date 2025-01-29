@@ -21,7 +21,7 @@ RSpec.describe Organization::Invite, type: :model do
 
     context "unique_pending_invite" do
       let(:organization) { create(:organization) }
-      let(:invite) { create(:organization_invite, organization: organization, email: "some@email.com") }
+      let(:invite) { create(:organization_invite, organization: organization, email: "some@email.com", role: "admin") }
 
       it "adds an error if an invite already exists for the organization" do
         invite2 = build(:organization_invite, organization: organization, email: invite.email)
