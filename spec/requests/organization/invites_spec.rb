@@ -5,9 +5,11 @@ require_relative '../../support/shared_examples/not_logged_in'
 
 RSpec.describe "/organization/:organization_id/invites", type: :request do
   let(:organization) { create(:organization) }
+  let(:membership) { create(:membership, organization: organization, user: user, role: role) }
   let(:user) { create(:user) }
   let(:session) { create(:session, user: user) }
   let(:policy) { nil }
+  let(:role) { "owner" }
 
   let(:valid_attributes) {
     skip("Add a hash of attributes valid for your model")
@@ -18,6 +20,7 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
   }
 
   before do
+    membership
     allow(OrganizationPolicy).to receive(:new).and_return(policy)
   end
 
@@ -27,12 +30,41 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
     it_behaves_like "when user is not logged in"
 
     context "when user is logged in" do
+      let(:pending_invite) { create(:organization_invite, organization: organization, status: "pending") }
+      let(:declined_invite) { create(:organization_invite, organization: organization, status: "declined") }
+      let(:accepted_invite) { create(:organization_invite, organization: organization, status: "accepted") }
+
       include_context "when user is logged in"
 
-      it "renders a successful response" do
+      before do
+        pending_invite
+        declined_invite
+        accepted_invite
       end
 
-      it "renders a list of pending and rejected invites" do
+      it "renders a successful response" do
+        do_request
+        expect(response).to be_successful
+      end
+
+      it "renders a list of pending and declined invites" do
+        do_request
+        expect(response.body).to include(pending_invite.email)
+        expect(response.body).to include(declined_invite.email)
+      end
+
+      it "does not render a list of accepted invites" do
+        do_request
+        expect(response.body).not_to include(accepted_invite.email)
+      end
+
+      context "when the organization is not found" do
+        let(:membership) { nil }
+
+        it "returns a 404" do
+          do_request
+          expect(response).to have_http_status(404)
+        end
       end
     end
   end

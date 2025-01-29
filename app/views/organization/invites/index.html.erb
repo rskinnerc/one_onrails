@@ -5,12 +5,6 @@
 <h1>Invites</h1>
 
 <div id="organization_invites">
-  <% @organization_invites.each do |organization_invite| %>
-    <%= render organization_invite %>
-    <p>
-      <%= link_to "Show this invite", organization_invite %>
-    </p>
-  <% end %>
+  <%= render @organization_invites %>
 </div>
 
-<%= link_to "New invite", new_organization_invite_path %>

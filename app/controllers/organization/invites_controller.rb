@@ -1,9 +1,10 @@
 class Organization::InvitesController < ApplicationController
+  before_action :set_organization
   before_action :set_organization_invite, only: %i[ show edit update destroy ]
 
   # GET /organization/invites
   def index
-    @organization_invites = Organization::Invite.all
+    @organization_invites = @organization.invites.where.not(status: :accepted)
   end
 
   # GET /organization/invites/1
@@ -49,6 +50,10 @@ class Organization::InvitesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_organization_invite
       @organization_invite = Organization::Invite.find(params.expect(:id))
+    end
+
+    def set_organization
+      @organization = current_user.organizations.find(params.expect(:organization_id))
     end
 
     # Only allow a list of trusted parameters through.
