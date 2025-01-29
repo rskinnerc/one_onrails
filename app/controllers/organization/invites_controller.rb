@@ -67,6 +67,11 @@ class Organization::InvitesController < ApplicationController
 
   # DELETE /organization/invites/1
   def destroy
+    unless policy(@organization).add_membership?
+      redirect_to organization_invites_path(@organization), alert: "You are not authorized to perform this action."
+      return
+    end
+
     @organization_invite.destroy!
     redirect_to organization_invites_path, notice: "Invite was successfully destroyed.", status: :see_other
   end

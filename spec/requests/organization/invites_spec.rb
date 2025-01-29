@@ -315,22 +315,44 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
 
     it_behaves_like "when user is not logged in"
 
+    before do
+      invite
+    end
+
     context "when user is logged in" do
       include_context "when user is logged in"
 
       context "when the user has access to the invite" do
+        let(:policy) { instance_double("OrganizationPolicy", add_membership?: true) }
+
         it "destroys the requested invite" do
+          expect {
+            do_request
+          }.to change(Organization::Invite, :count).by(-1)
         end
 
         it "redirects to the organization invites list" do
+          do_request
+          expect(response).to redirect_to(organization_invites_url(organization))
+        end
+
+        it "sets the flash notice" do
+          do_request
+          expect(flash[:notice]).to eq("Invite was successfully destroyed.")
         end
       end
 
       context "when the user does not have access to the invite" do
+        let(:policy) { instance_double("OrganizationPolicy", add_membership?: false) }
+
         it "redirects to the organization invites page" do
+          do_request
+          expect(response).to redirect_to(organization_invites_url(organization))
         end
 
         it "displays a flash message" do
+          do_request
+          expect(flash[:alert]).to eq("You are not authorized to perform this action.")
         end
       end
     end
