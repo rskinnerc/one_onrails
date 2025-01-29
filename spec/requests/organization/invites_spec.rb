@@ -250,7 +250,7 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
   end
 
   describe "PATCH /update" do
-    let(:invite) { create(:organization_invite, organization: organization) }
+    let(:invite) { create(:organization_invite, organization: organization, role: "admin") }
     let(:do_request) { patch organization_invite_url(organization, invite), params: params }
     let(:params) { {} }
 
@@ -260,21 +260,50 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
       include_context "when user is logged in"
 
       context "when the user has access to the invite" do
-        before do
-          allow(OrganizationPolicy).to receive(:new).and_return(policy)
-        end
+        let(:policy) { instance_double("OrganizationPolicy", add_membership?: true) }
+
         context "with valid parameters" do
+          let(:params) { { organization_invite: valid_attributes } }
+
+          it "updates the requested invite" do
+            do_request
+            invite.reload
+            expect(invite.role).to eq("member")
+            expect(invite.email).to eq(valid_attributes[:email])
+          end
+
+          it "redirects to the invite" do
+            do_request
+            expect(response).to redirect_to(organization_invite_url(organization, invite))
+          end
         end
 
         context "with invalid parameters" do
+          let(:params) { { organization_invite: invalid_attributes } }
+
+          it "returns a unprocessable entity response" do
+            do_request
+            expect(response).to have_http_status(:unprocessable_entity)
+          end
+
+          it "sets the flash alert" do
+            do_request
+            expect(flash[:alert]).to eq("Invite could not be updated.")
+          end
         end
       end
 
       context "when the user does not have access to the invite" do
+        let(:policy) { instance_double("OrganizationPolicy", add_membership?: false) }
+
         it "redirects to the organization invites page" do
+          do_request
+          expect(response).to redirect_to(organization_invites_url(organization))
         end
 
         it "displays a flash message" do
+          do_request
+          expect(flash[:alert]).to eq("You are not authorized to perform this action.")
         end
       end
     end

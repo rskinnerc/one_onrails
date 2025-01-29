@@ -52,9 +52,15 @@ class Organization::InvitesController < ApplicationController
 
   # PATCH/PUT /organization/invites/1
   def update
+    unless policy(@organization).add_membership?
+      redirect_to organization_invites_path(@organization), alert: "You are not authorized to perform this action."
+      return
+    end
+
     if @organization_invite.update(organization_invite_params)
       redirect_to @organization_invite, notice: "Invite was successfully updated.", status: :see_other
     else
+      flash.now[:alert] = "Invite could not be updated."
       render :edit, status: :unprocessable_entity
     end
   end
