@@ -210,6 +210,32 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
             do_request
             expect(response).to redirect_to(organization_invite_url(organization, Organization::Invite.last))
           end
+
+          it "adds the current user as the inviter" do
+            do_request
+            expect(Organization::Invite.last.inviter).to eq(user)
+          end
+
+          it "sets a token" do
+            do_request
+            expect(Organization::Invite.last.token).to be_present
+          end
+
+          it "sets the status to pending" do
+            do_request
+            expect(Organization::Invite.last.status).to eq("pending")
+          end
+
+          it "sets the organization" do
+            do_request
+            expect(Organization::Invite.last.organization).to eq(organization)
+          end
+
+          it "sends an invitation email" do
+            expect {
+              do_request
+            }.to have_enqueued_mail(OrganizationInviteMailer, :invite)
+          end
         end
 
         context "with invalid parameters" do
