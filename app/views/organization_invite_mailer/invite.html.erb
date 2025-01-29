@@ -1,0 +1,7 @@
+<h1>OrganizationInvite#invite</h1>
+
+<p>
+  Hello! <%= @inviter.email_address %> invited you to join the organization <%= @organization.name %>. Please click the link below to accept the invitation.
+</p>
+
+<%= link_to 'Accept Invitation', organization_invite_url(@organization, @organization_invite) %>
