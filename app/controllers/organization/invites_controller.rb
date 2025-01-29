@@ -16,6 +16,10 @@ class Organization::InvitesController < ApplicationController
 
   # GET /organization/invites/new
   def new
+    unless policy(@organization).add_membership?
+      redirect_to organization_invites_path(@organization)
+    end
+
     @organization_invite = Organization::Invite.new
   end
 

@@ -126,12 +126,20 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
       include_context "when user is logged in"
 
       context "when the user can invite users to the organization" do
+        let(:policy) { instance_double("OrganizationPolicy", add_membership?: true) }
+
         it "renders a successful response" do
+          do_request
+          expect(response).to be_successful
         end
       end
 
       context "when the user cannot invite users to the organization" do
+        let(:policy) { instance_double("OrganizationPolicy", add_membership?: false) }
+
         it "redirects to the organization invites page" do
+          do_request
+          expect(response).to redirect_to(organization_invites_url(organization))
         end
       end
     end
