@@ -9,6 +9,9 @@ class Organization::InvitesController < ApplicationController
 
   # GET /organization/invites/1
   def show
+    unless policy(@organization).list_memberships?
+      redirect_to organization_invites_path(@organization), alert: "You are not authorized to access this page."
+    end
   end
 
   # GET /organization/invites/new
@@ -49,7 +52,7 @@ class Organization::InvitesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_organization_invite
-      @organization_invite = Organization::Invite.find(params.expect(:id))
+      @organization_invite = @organization.invites.find(params.expect(:id))
     end
 
     def set_organization
