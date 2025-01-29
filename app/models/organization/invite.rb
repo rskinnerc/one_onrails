@@ -6,6 +6,7 @@ class Organization::Invite < ApplicationRecord
   belongs_to :invited_user, class_name: "User", optional: true
 
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :role, exclusion: { in: %w[owner] }
   validate :unique_pending_invite
 
   enum :status, {

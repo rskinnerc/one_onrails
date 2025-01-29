@@ -18,6 +18,7 @@ class Organization::InvitesController < ApplicationController
   def new
     unless policy(@organization).add_membership?
       redirect_to organization_invites_path(@organization)
+      return
     end
 
     @organization_invite = Organization::Invite.new
@@ -32,11 +33,19 @@ class Organization::InvitesController < ApplicationController
 
   # POST /organization/invites
   def create
+    unless policy(@organization).add_membership?
+      redirect_to organization_invites_path(@organization), alert: "You are not authorized to perform this action."
+      return
+    end
+
     @organization_invite = Organization::Invite.new(organization_invite_params)
+    @organization_invite.organization = @organization
+    @organization_invite.inviter = current_user
 
     if @organization_invite.save
-      redirect_to @organization_invite, notice: "Invite was successfully created."
+      redirect_to organization_invite_path(@organization, @organization_invite), notice: "Invite was successfully created."
     else
+      flash.now[:alert] = "Invite could not be created."
       render :new, status: :unprocessable_entity
     end
   end
@@ -68,6 +77,6 @@ class Organization::InvitesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def organization_invite_params
-      params.fetch(:organization_invite, {})
+      params.expect(organization_invite: [ :email, :role ])
     end
 end

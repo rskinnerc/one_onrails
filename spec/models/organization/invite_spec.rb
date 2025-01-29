@@ -17,6 +17,7 @@ RSpec.describe Organization::Invite, type: :model do
     it { should_not allow_value("someemail.com").for(:email) }
     it { should_not allow_value("some@.com").for(:email) }
     it { should_not allow_value("some.com").for(:email) }
+    it { should_not allow_value('owner').for(:role) }
 
     context "unique_pending_invite" do
       let(:organization) { create(:organization) }
