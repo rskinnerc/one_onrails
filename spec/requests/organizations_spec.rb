@@ -86,6 +86,11 @@ RSpec.describe "/organizations", type: :request do
           expect(response.body).to include(organization.name)
         end
 
+        it "renders the organization invites turbo frame" do
+          do_request
+          expect(response.body).to include("turbo-frame id=\"organization_#{organization.id}_invites\"")
+        end
+
         context "when the organization does not exist" do
           let(:do_request) { get "/organizations/0" }
 

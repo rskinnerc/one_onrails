@@ -8,7 +8,13 @@
 
 <div class="col-span-12 md:col-span-6 gap-4 flex flex-col">
   <%= turbo_frame_tag [@organization.id, :memberships], src: organization_memberships_path(@organization), loading: 'eager' do %>
-    Loading...
+    <span class="loading loading-dots loading-sm"></span>
+  <% end %>
+</div>
+
+<div class="col-span-12 md:cold-span-6 gap-4 flex flex-col">
+  <%= turbo_frame_tag "organization_#{@organization.id}_invites", src: organization_invites_path(@organization) do %>
+    <span class="loading loading-dots loading-sm"></span>
   <% end %>
 </div>
 
@@ -18,3 +24,4 @@
     Back to organizations
   <% end %>
 </div>
+

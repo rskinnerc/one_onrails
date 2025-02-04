@@ -53,6 +53,11 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
         expect(response).to be_successful
       end
 
+      it "renders an organization invites turbo frame" do
+        do_request
+        expect(response.body).to include("turbo-frame id=\"organization_#{organization.id}_invites\"")
+      end
+
       it "renders a list of pending and declined invites" do
         do_request
         expect(response.body).to include(pending_invite.email)
@@ -90,6 +95,11 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
         it "renders a successful response" do
           do_request
           expect(response).to be_successful
+        end
+
+        it "renders the organization invite turbo frame" do
+          do_request
+          expect(response.body).to include("turbo-frame id=\"organization_#{organization.id}_invites\"")
         end
 
         it "renders the invite details" do
@@ -138,6 +148,11 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
           do_request
           expect(response).to be_successful
         end
+
+        it "renders the new organization invite turbo frame" do
+          do_request
+          expect(response.body).to include("turbo-frame id=\"organization_#{organization.id}_invites\"")
+        end
       end
 
       context "when the user cannot invite users to the organization" do
@@ -166,6 +181,11 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
         it "renders a successful response" do
           do_request
           expect(response).to be_successful
+        end
+
+        it "renders the edit organization invite turbo frame" do
+          do_request
+          expect(response.body).to include("turbo-frame id=\"organization_#{organization.id}_invites\"")
         end
       end
 

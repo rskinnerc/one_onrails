@@ -5,6 +5,9 @@
 <h1>Invites</h1>
 
 <div id="organization_invites">
-  <%= render @organization_invites %>
+  <%= turbo_frame_tag "organization_#{@organization.id}_invites" do %>
+    <%= render @organization_invites %>
+    <%= link_to 'Invite Member', new_organization_invite_path(@organization) %>
+  <% end %>
 </div>
 

@@ -1,10 +1,14 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @organization_invite %>
 
-<div>
-  <%= link_to "Edit this invite", edit_organization_invite_path(@organization_invite) %> |
-  <%= link_to "Back to invites", organization_invites_path %>
+<%= turbo_frame_tag "organization_#{@organization.id}_invites" do %>
 
-  <%= button_to "Destroy this invite", @organization_invite, method: :delete %>
-</div>
+  <%= render @organization_invite %>
+
+  <div>
+    <%= link_to "Edit this invite", edit_organization_invite_path(@organization_invite) %> |
+    <%= link_to "Back to invites", organization_invites_path %>
+
+    <%= button_to "Destroy this invite", @organization_invite, method: :delete %>
+  </div>
+<% end %>

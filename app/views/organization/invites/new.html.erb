@@ -1,5 +1,8 @@
 <% content_for :title, "New invite" %>
 
+
+<%= turbo_frame_tag "organization_#{@organization.id}_invites" do %>
+
 <h1>New invite</h1>
 
 <%= render "form", organization_invite: @organization_invite %>
@@ -9,3 +12,5 @@
 <div>
   <%= link_to "Back to invites", organization_invites_path %>
 </div>
+
+<% end %>
