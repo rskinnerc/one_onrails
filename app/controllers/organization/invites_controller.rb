@@ -43,7 +43,7 @@ class Organization::InvitesController < ApplicationController
     @organization_invite.inviter = current_user
 
     if @organization_invite.save
-      OrganizationInviteMailer.invite(@organization_invite).deliver_later
+      OrganizationInviteMailer.invite(organization_invite: @organization_invite).deliver_later
       redirect_to organization_invite_path(@organization, @organization_invite), notice: "Invite was successfully created."
     else
       flash.now[:alert] = "Invite could not be created."

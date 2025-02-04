@@ -234,7 +234,14 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
           it "sends an invitation email" do
             expect {
               do_request
-            }.to have_enqueued_mail(OrganizationInviteMailer, :invite)
+            }.to change(Organization::Invite, :count).by(1)
+              .and have_enqueued_mail(OrganizationInviteMailer, :invite)
+              .with(organization_invite: have_attributes(
+                organization: organization,
+                inviter: user,
+                email: valid_attributes[:email],
+                status: "pending"
+              ))
           end
         end
 
