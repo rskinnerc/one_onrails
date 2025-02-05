@@ -1,13 +1,35 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :sidebar do %>
+  <% render SidebarComponent.new(controller: controller) %>
+<% end %>
 
-<% content_for :title, "Invites" %>
+<% content_for :title, "Organization Invites" %>
 
-<h1>Invites</h1>
+<h1 class="col-span-12 font-semibold text-lg">Organization Invites</h1>
 
-<div id="organization_invites">
+<div class="col-span-12 md:col-span-6 md:order-2 gap-4 flex flex-col">
   <%= turbo_frame_tag "organization_#{@organization.id}_invites" do %>
-    <%= render @organization_invites %>
-    <%= link_to 'Invite Member', new_organization_invite_path(@organization) %>
+    <% if @organization_invites.empty? %>
+      <div class="card card-compact bg-base-200 shadow">
+        <div class="card-body">
+          <div class="flex flex-col items-center p-4 gap-4 justify-center">
+            <p class="text-sm">You don't have any non-accepted invite.</p>
+            <% if policy(@organization).add_membership? %> 
+              <%= link_to "Invite member", "#", class: "btn btn-accent btn-xs self-end" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <div class="flex flex-col items-center gap-4 my-4">
+        <p class="text-sm">Manage your organization invites.</p>
+        <%= link_to 'Invite member', new_organization_invite_path(@organization), class: 'btn btn-accent btn-sm' %>
+      </div>
+      <div class="card card-compact bg-base-200 shadow">
+        <div class="card-body">
+          <%= render @organization_invites %>
+        </div>
+      </div>
+    <% end %>
   <% end %>
 </div>
 

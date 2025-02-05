@@ -3,7 +3,7 @@
 <% end %>
 
 <div class="col-span-12 md:col-span-6 gap-4 flex flex-col">
-    <%= render @organization %>
+  <%= render @organization %>
 </div>
 
 <div class="col-span-12 md:col-span-6 gap-4 flex flex-col">
@@ -12,7 +12,8 @@
   <% end %>
 </div>
 
-<div class="col-span-12 md:cold-span-6 gap-4 flex flex-col">
+<div class="col-span-12 md:col-span-6 gap-4 flex flex-col">
+  <h2 class="font-semibold">Organization Invites</h1>
   <%= turbo_frame_tag "organization_#{@organization.id}_invites", src: organization_invites_path(@organization) do %>
     <span class="loading loading-dots loading-sm"></span>
   <% end %>
