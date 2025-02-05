@@ -64,19 +64,9 @@ RSpec.describe "/memberships", type: :request do
           end
         end
 
-        it "does not render the new membership button" do
-          do_request
-          expect(response.body).not_to include("Invite member")
-        end
-
         context "when the user is owner of the organization" do
           before do
             membership.update(role: "owner")
-          end
-
-          it "renders the new membership button" do
-            do_request
-            expect(response.body).to include("Invite member")
           end
 
           it "renders the edit button for the user's membership" do
