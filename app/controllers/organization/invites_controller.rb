@@ -59,7 +59,7 @@ class Organization::InvitesController < ApplicationController
     end
 
     if @organization_invite.update(organization_invite_params)
-      redirect_to @organization_invite, notice: "Invite was successfully updated.", status: :see_other
+      redirect_to organization_invite_path(@organization, @organization_invite), notice: "Invite was successfully updated.", status: :see_other
     else
       flash.now[:alert] = "Invite could not be updated."
       render :edit, status: :unprocessable_entity

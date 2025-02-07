@@ -1,4 +1,4 @@
-<%= form_with(model: organization_invite) do |form| %>
+<%= form_with(model: organization_invite, url: action_name == 'edit' ? organization_invite_path(@organization, organization_invite) : organization_invites_path(@organization)) do |form| %>
   <% if organization_invite.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(organization_invite.errors.count, "error") %> prohibited this organization_invite from being saved:</h2>
@@ -10,8 +10,22 @@
       </ul>
     </div>
   <% end %>
+  <label class="form-control">
+    <div class="label">
+      <span class="label-text">Email</span>
+    </div>
+    <%= form.text_field :email, class: "input input-bordered #{'input-error' if organization_invite.errors[:email].any?}" %>
+  </label>
+  <label class="label cursor-pointer flex items-center justify-start gap-4">
+    <span class="label-text">Admin</span>
+    <%= form.radio_button :role, 'admin', class: "radio radio-sm" %>
+  </label>
+  <label class="label cursor-pointer flex items-center justify-start gap-4">
+    <span class="label-text">Member</span>
+    <%= form.radio_button :role, 'member', class: "radio radio-sm" %>
+  </label>
 
-  <div>
-    <%= form.submit %>
+  <div class="flex items-center justify-end">
+    <%= form.submit class: "btn btn-accent btn-xs" %>
   </div>
 <% end %>
