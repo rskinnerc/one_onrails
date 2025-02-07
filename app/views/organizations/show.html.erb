@@ -6,7 +6,7 @@
   <%= render @organization %>
 </div>
 
-<div class="col-span-12 md:col-span-6 gap-4 flex flex-col">
+<div class="col-span-12 row-span-2 md:col-span-6 gap-4 flex flex-col">
   <%= turbo_frame_tag [@organization.id, :memberships], src: organization_memberships_path(@organization), loading: 'eager' do %>
     <span class="loading loading-dots loading-sm"></span>
   <% end %>
