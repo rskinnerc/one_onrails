@@ -1,7 +1,7 @@
-<%= form_with(model: organization_invite, url: action_name == 'edit' ? organization_invite_path(@organization, organization_invite) : organization_invites_path(@organization)) do |form| %>
+<%= form_with(model: organization_invite, url: %w(edit update).include?(action_name)? organization_invite_path(@organization, organization_invite) : organization_invites_path(@organization)) do |form| %>
   <% if organization_invite.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(organization_invite.errors.count, "error") %> prohibited this organization_invite from being saved:</h2>
+      <h2><%= pluralize(organization_invite.errors.count, "error") %> prohibited this organization invite from being saved:</h2>
 
       <ul>
         <% organization_invite.errors.each do |error| %>
