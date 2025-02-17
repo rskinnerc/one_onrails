@@ -1,6 +1,6 @@
 class Organization::InvitesController < ApplicationController
   before_action :set_organization
-  before_action :set_organization_invite, only: %i[ show edit update destroy ]
+  before_action :set_organization_invite, only: %i[ show edit update destroy resend ]
 
   # GET /organization/invites
   def index
@@ -49,6 +49,17 @@ class Organization::InvitesController < ApplicationController
       flash.now[:alert] = "Invite could not be created."
       render :new, status: :unprocessable_entity
     end
+  end
+
+  # POST /organization/invites/1/resend
+  def resend
+    unless policy(@organization).add_membership?
+      redirect_to organization_invites_path(@organization), alert: "You are not authorized to perform this action."
+      return
+    end
+
+    OrganizationInviteMailer.invite(organization_invite: @organization_invite).deliver_later
+    redirect_to organization_invite_path(@organization, @organization_invite), notice: "Invite was successfully resent."
   end
 
   # PATCH/PUT /organization/invites/1
