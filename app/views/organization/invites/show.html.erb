@@ -24,6 +24,12 @@
           <span>Role:</span> <%= render Memberships::RoleComponent.new(role: @organization_invite.role) %>
         </div>
         <div class="flex gap-2 items-center justify-end mt-2">
+          <%= button_to resend_organization_invite_path(@organization, @organization_invite), method: :post, class: "btn #{@resend_success && 'btn-success'} btn-xs btn-outline" do %>
+            <span>Resend</span>
+            <% if @resend_success %>
+              <%= render Icons::CheckCircleComponent.new(classes: 'h-4 w-4 fill-success') %>
+            <% end %>
+          <% end %>
           <%= link_to "Edit this invite", edit_organization_invite_path(@organization, @organization_invite), class: 'btn btn-secondary btn-xs btn-outline' %>
           <%= button_to organization_invite_path(@organization, @organization_invite), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "cursor-pointer h-6" do %>
             <%= render Icons::TrashBinMinimalisticComponent.new(classes: 'h-6 w-6 fill-error') %> 

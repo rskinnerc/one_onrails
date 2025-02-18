@@ -9,6 +9,8 @@ class Organization::InvitesController < ApplicationController
 
   # GET /organization/invites/1
   def show
+    @resend_success = params[:resend_success]
+
     unless policy(@organization).list_memberships?
       redirect_to organization_invites_path(@organization), alert: "You are not authorized to access this page."
     end
@@ -59,7 +61,7 @@ class Organization::InvitesController < ApplicationController
     end
 
     OrganizationInviteMailer.invite(organization_invite: @organization_invite).deliver_later
-    redirect_to organization_invite_path(@organization, @organization_invite), notice: "Invite was successfully resent."
+    redirect_to organization_invite_path(@organization, @organization_invite, { resend_success: true }), notice: "Invite was successfully resent."
   end
 
   # PATCH/PUT /organization/invites/1

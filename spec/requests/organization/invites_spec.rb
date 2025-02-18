@@ -323,7 +323,7 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
 
         it "redirects to the organization invite" do
           do_request
-          expect(response).to redirect_to(organization_invite_url(organization, invite))
+          expect(response).to redirect_to(organization_invite_url(organization, invite, { resend_success: true }))
         end
 
         it "sets the flash notice" do
