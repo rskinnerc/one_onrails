@@ -397,6 +397,10 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
         context "with valid parameters" do
           let(:params) { { organization_invite: valid_attributes } }
 
+          before do
+            allow(Organizations::UpdateInvite).to receive(:call).and_call_original
+          end
+
           it "updates the requested invite" do
             do_request
             invite.reload
@@ -407,6 +411,58 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
           it "redirects to the invite" do
             do_request
             expect(response).to redirect_to(organization_invite_url(organization, invite))
+          end
+
+          it "send resends the invitation email" do
+            expect {
+              do_request
+            }.to have_enqueued_mail(OrganizationInviteMailer, :invite)
+              .with(organization_invite: invite)
+          end
+
+          it "calls the Organizations::UpdateInvite service" do
+            expect(Organizations::UpdateInvite).to receive(:call).with(
+              invite: invite,
+              inviter: user,
+              email: valid_attributes[:email],
+              role: valid_attributes[:role]
+            )
+
+            do_request
+          end
+
+          context "when the invited user already exists" do
+            let(:existing_user) { create(:user) }
+            let(:params) { { organization_invite: valid_attributes.merge(email: existing_user.email_address) } }
+
+            it "sets the invited user" do
+              do_request
+              invite.reload
+              expect(invite.invited_user).to eq(existing_user)
+            end
+          end
+
+          context "when updating the invite fails" do
+            let(:result) { Callable::Result.new(false) }
+            before do
+              allow(Organizations::UpdateInvite).to receive(:call).and_return(result)
+            end
+
+            it "returns a unprocessable entity response" do
+              do_request
+              expect(response).to have_http_status(:unprocessable_entity)
+            end
+
+            it "sets the flash alert" do
+              do_request
+              expect(flash[:alert]).to eq("Invite could not be updated.")
+            end
+
+            it "does not send an invitation email" do
+              expect {
+                do_request
+              }.not_to have_enqueued_mail(OrganizationInviteMailer, :invite)
+            end
           end
         end
 

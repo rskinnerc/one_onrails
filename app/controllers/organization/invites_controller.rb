@@ -70,8 +70,11 @@ class Organization::InvitesController < ApplicationController
       return
     end
 
-    if @organization_invite.update(organization_invite_params)
-      redirect_to organization_invite_path(@organization, @organization_invite), notice: "Invite was successfully updated.", status: :see_other
+    result = Organizations::UpdateInvite.call(invite: @organization_invite, inviter: current_user, email: organization_invite_params[:email], role: organization_invite_params[:role])
+
+    if result.success?
+      OrganizationInviteMailer.invite(organization_invite: result.object).deliver_later
+      redirect_to organization_invite_path(@organization, result.object), notice: "Invite was successfully updated.", status: :see_other
     else
       flash.now[:alert] = "Invite could not be updated."
       render :edit, status: :unprocessable_entity
