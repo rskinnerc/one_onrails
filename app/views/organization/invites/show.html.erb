@@ -16,7 +16,7 @@
             <%= render Icons::RefreshComponent.new(classes: 'h-6 w-6 fill-current') %>
           <% end %>
         </div>
-        <%= render @organization_invite %>
+        <%= render partial: 'organization/invites/invite', locals: { invite: @organization_invite } %>
         <div class="font-light text-sm">
           Invited by <!--email_off--><%= @organization_invite.inviter.email_address %><!--/email_off--> on <%= @organization_invite.created_at.to_fs(:long) %>
         </div>
