@@ -220,6 +220,10 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
         context "with valid parameters" do
           let(:params) { { organization_invite: valid_attributes } }
 
+          before do
+            allow(Organizations::CreateInvite).to receive(:call).and_call_original
+          end
+
           it "creates a new Organization::Invite" do
             expect {
               do_request
@@ -235,6 +239,35 @@ RSpec.describe "/organization/:organization_id/invites", type: :request do
             do_request
             expect(Organization::Invite.last.inviter).to eq(user)
           end
+
+          it "calls the Organizations::CreateInvite service" do
+            expect(Organizations::CreateInvite).to receive(:call).with(
+              organization: organization,
+              inviter: user,
+              email: valid_attributes[:email],
+              role: valid_attributes[:role]
+            )
+
+            do_request
+          end
+
+          it "does not set the invited user" do
+            do_request
+            expect(Organization::Invite.last.invited_user).
+              to be_nil
+          end
+
+          context "when the invited user already exists" do
+            let(:existing_user) { create(:user) }
+            let(:params) { { organization_invite: valid_attributes.merge(email: existing_user.email_address) } }
+
+            it "sets the invited user" do
+              do_request
+              expect(Organization::Invite.last.invited_user).
+                to eq(existing_user)
+            end
+          end
+
 
           it "sets a token" do
             do_request

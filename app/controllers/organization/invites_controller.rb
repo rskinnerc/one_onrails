@@ -40,14 +40,13 @@ class Organization::InvitesController < ApplicationController
       return
     end
 
-    @organization_invite = Organization::Invite.new(organization_invite_params)
-    @organization_invite.organization = @organization
-    @organization_invite.inviter = current_user
+    result = Organizations::CreateInvite.call(organization: @organization, inviter: current_user, email: organization_invite_params[:email], role: organization_invite_params[:role])
 
-    if @organization_invite.save
-      OrganizationInviteMailer.invite(organization_invite: @organization_invite).deliver_later
-      redirect_to organization_invite_path(@organization, @organization_invite), notice: "Invite was successfully created."
+    if result.success?
+      OrganizationInviteMailer.invite(organization_invite: result.object).deliver_later
+      redirect_to organization_invite_path(@organization, result.object), notice: "Invite was successfully created."
     else
+      @organization_invite = result.object
       flash.now[:alert] = "Invite could not be created."
       render :new, status: :unprocessable_entity
     end
