@@ -1,17 +1,7 @@
 require 'rails_helper'
 
-RSpec.shared_examples "when user is not logged in" do
-  it "redirects to the login page" do
-    do_request
-    expect(response).to redirect_to(new_session_path)
-  end
-end
-
-RSpec.shared_context "when user is logged in" do
-  before do
-    allow(Current).to receive(:session).and_return(session)
-  end
-end
+require_relative '../support/shared_contexts/logged_in'
+require_relative '../support/shared_examples/not_logged_in'
 
 RSpec.describe "/organizations", type: :request do
   let(:user) { create(:user) }
@@ -94,6 +84,11 @@ RSpec.describe "/organizations", type: :request do
         it "displays the organization" do
           do_request
           expect(response.body).to include(organization.name)
+        end
+
+        it "renders the organization invites turbo frame" do
+          do_request
+          expect(response.body).to include("turbo-frame id=\"organization_#{organization.id}_invites\"")
         end
 
         context "when the organization does not exist" do

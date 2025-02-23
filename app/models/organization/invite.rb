@@ -1,10 +1,9 @@
 class Organization::Invite < ApplicationRecord
+  has_secure_token :token
+
   belongs_to :organization
   belongs_to :inviter, class_name: "User"
   belongs_to :invited_user, class_name: "User", optional: true
-
-  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validate :unique_pending_invite
 
   enum :status, {
     pending: 0,
@@ -17,6 +16,10 @@ class Organization::Invite < ApplicationRecord
     admin: 1,
     owner: 2
   }
+
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :role, inclusion: { in: self.roles.keys.reject { |key| key == "owner" } }
+  validate :unique_pending_invite
 
   private
 

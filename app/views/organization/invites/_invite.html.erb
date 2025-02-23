@@ -1,0 +1,6 @@
+<div id="<%= dom_id invite %>" class="flex items-center justify-between py-2">
+  <%= link_to organization_invite_path(@organization, invite), class: 'link link-secondary' do %>
+    <!--email_off--><%= invite.email%><!--/email_off-->
+  <% end %>
+  <%= render Organization::Invites::StatusComponent.new(status: invite.status) %>
+</div>

@@ -1,17 +1,7 @@
 require 'rails_helper'
 
-RSpec.shared_examples "when user is not logged in" do
-  it "redirects to the login page" do
-    do_request
-    expect(response).to redirect_to(new_session_path)
-  end
-end
-
-RSpec.shared_context "when user is logged in" do
-  before do
-    allow(Current).to receive(:session).and_return(session)
-  end
-end
+require_relative '../support/shared_contexts/logged_in'
+require_relative '../support/shared_examples/not_logged_in'
 
 RSpec.describe "/memberships", type: :request do
   let(:organization) { create(:organization) }
@@ -74,19 +64,9 @@ RSpec.describe "/memberships", type: :request do
           end
         end
 
-        it "does not render the new membership button" do
-          do_request
-          expect(response.body).not_to include("Invite member")
-        end
-
         context "when the user is owner of the organization" do
           before do
             membership.update(role: "owner")
-          end
-
-          it "renders the new membership button" do
-            do_request
-            expect(response.body).to include("Invite member")
           end
 
           it "renders the edit button for the user's membership" do

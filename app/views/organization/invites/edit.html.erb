@@ -1,0 +1,24 @@
+<% content_for :sidebar do %>
+  <% render SidebarComponent.new(controller: controller) %>
+<% end %>
+
+<% content_for :title, "Organization Invites" %>
+
+<div class="col-span-12 md:col-span-6 md:order-2 gap-4 flex flex-col">
+  <%= turbo_frame_tag "organization_#{@organization.id}_invites" do %>
+    <div class="card card-compact bg-base-200 shadow">
+      <div class="card-body">
+        <div class="flex items-center justify-end">
+          <%= link_to organization_invite_path(@organization, @organization_invite) do %>
+            <%= render Icons::RoundAltArrowLeftComponent.new(classes: 'h-6 w-6 fill-current') %>
+          <% end %>
+          <%= link_to edit_organization_invite_path(@organization, @organization_invite), class: 'flex items-center gap-1' do %>
+            <%= render Icons::RefreshComponent.new(classes: 'h-6 w-6 fill-current') %>
+          <% end %>
+        </div>
+        <h3 class="font-semibold">Updating invite</h3>
+        <%= render "form", organization_invite: @organization_invite %>
+      </div>
+    </div>
+  <% end %>
+</div>

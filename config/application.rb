@@ -40,5 +40,7 @@ module OneOnrails
     config.generators.system_tests = nil
 
     config.action_view.field_error_proc = Proc.new { |html_tag, instance| html_tag.html_safe }
+
+    config.action_mailer.preview_paths << "#{Rails.root}/spec/mailers/previews"
   end
 end

@@ -18,6 +18,11 @@ Rails.application.routes.draw do
 
   resources :organizations do
     resources :memberships, except: %i[show new create]
+    resources :invites, controller: "organization/invites" do
+      member do
+        post :resend
+      end
+    end
   end
 
   resolve("Profile") { [ :profile ] }

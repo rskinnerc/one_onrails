@@ -6,6 +6,5 @@ FactoryBot.define do
     email { Faker::Internet.email }
     status { 0 }
     role { 0 }
-    token { "MyToken" }
   end
 end

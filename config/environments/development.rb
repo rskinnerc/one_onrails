@@ -1,6 +1,11 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  config.hosts = [
+    "localhost",
+    "",
+    "local-one.onrails.net"
+  ]
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Make code changes take effect immediately without server restart.
@@ -38,7 +43,7 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   # Set localhost to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  config.action_mailer.default_url_options = { host: "https://local-one.onrails.net" }
 
   config.action_mailer.delivery_method = :smtp
 
@@ -67,6 +72,7 @@ Rails.application.configure do
   config.active_job.verbose_enqueue_logs = true
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
+  config.solid_queue.logger = ActiveSupport::Logger.new(STDOUT)
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true

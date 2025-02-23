@@ -7,16 +7,21 @@ RSpec.describe Organization::Invite, type: :model do
     it { should belong_to(:invited_user).class_name("User").optional }
   end
 
+  describe "has_secure_token" do
+    it { should have_secure_token(:token) }
+  end
+
   describe "validations" do
     it { should validate_presence_of(:email) }
     it { should allow_value("some@email.com").for(:email) }
     it { should_not allow_value("someemail.com").for(:email) }
     it { should_not allow_value("some@.com").for(:email) }
     it { should_not allow_value("some.com").for(:email) }
+    it { should_not allow_value('owner').for(:role) }
 
     context "unique_pending_invite" do
       let(:organization) { create(:organization) }
-      let(:invite) { create(:organization_invite, organization: organization, email: "some@email.com") }
+      let(:invite) { create(:organization_invite, organization: organization, email: "some@email.com", role: "admin") }
 
       it "adds an error if an invite already exists for the organization" do
         invite2 = build(:organization_invite, organization: organization, email: invite.email)

@@ -1,0 +1,42 @@
+<% content_for :sidebar do %>
+  <% render SidebarComponent.new(controller: controller) %>
+<% end %>
+
+<% content_for :title, "Organization Invites" %>
+
+<div class="col-span-12 md:col-span-6 md:order-2 gap-4 flex flex-col">
+  <%= turbo_frame_tag "organization_#{@organization.id}_invites" do %>
+    <div class="card card-compact bg-base-200 shadow">
+      <div class="card-body">
+        <div class="flex items-center justify-end">
+          <%= link_to organization_invites_path do %>
+            <%= render Icons::RoundAltArrowLeftComponent.new(classes: 'h-6 w-6 fill-current') %>
+          <% end %>
+          <%= link_to organization_invite_path(@organization, @organization_invite), class: 'flex items-center gap-1' do %>
+            <%= render Icons::RefreshComponent.new(classes: 'h-6 w-6 fill-current') %>
+          <% end %>
+        </div>
+        <%= render partial: 'organization/invites/invite', locals: { invite: @organization_invite } %>
+        <div class="font-light text-sm">
+          Invited by <!--email_off--><%= @organization_invite.inviter.email_address %><!--/email_off--> on <%= @organization_invite.created_at.to_fs(:long) %>
+        </div>
+        <div class="flex items-center gap-2">
+          <span>Role:</span> <%= render Memberships::RoleComponent.new(role: @organization_invite.role) %>
+        </div>
+        <div class="flex gap-2 items-center justify-end mt-2">
+          <%= button_to resend_organization_invite_path(@organization, @organization_invite), method: :post, class: "btn #{@resend_success && 'btn-success'} btn-xs btn-outline" do %>
+            <span>Resend</span>
+            <% if @resend_success %>
+              <%= render Icons::CheckCircleComponent.new(classes: 'h-4 w-4 fill-success') %>
+            <% end %>
+          <% end %>
+          <%= link_to "Edit this invite", edit_organization_invite_path(@organization, @organization_invite), class: 'btn btn-secondary btn-xs btn-outline' %>
+          <%= button_to organization_invite_path(@organization, @organization_invite), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "cursor-pointer h-6" do %>
+            <%= render Icons::TrashBinMinimalisticComponent.new(classes: 'h-6 w-6 fill-error') %> 
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+</div>
